@@ -1,0 +1,167 @@
+[
+  {
+    "review_id": "45256b43-2446-45aa-9fdc-952beace80a9",
+    "email_id": "email_004",
+    "review_status": "RESOLVED",
+    "review_reason": "missing_value",
+    "message": "Missing or unusable value in: gross_weight_kg",
+    "original_extraction_payload": {
+      "email_category": "BL_COMPARISON",
+      "attachments_present": true,
+      "extraction_errors": null,
+      "doc1_type": "SI",
+      "doc1_data": {
+        "shipper": "ABC Corp",
+        "consignee": "XYZ Ltd",
+        "notify_party": "Same",
+        "port_of_loading": "PORT KLANG",
+        "port_of_discharge": "SINGAPORE",
+        "container_count": "3",
+        "gross_weight_kg": "22000"
+      },
+      "doc2_type": "BL",
+      "doc2_data": {
+        "shipper": "ABC Corp",
+        "consignee": "XYZ Ltd",
+        "notify_party": "Same",
+        "port_of_loading": "PORT KLANG",
+        "port_of_discharge": "SINGAPORE",
+        "container_count": "3",
+        "gross_weight_kg": null
+      }
+    },
+    "extraction_payload": {
+      "email_category": "BL_COMPARISON",
+      "attachments_present": true,
+      "extraction_errors": null,
+      "doc1_type": "SI",
+      "doc1_data": {
+        "shipper": "ABC Corp",
+        "consignee": "XYZ Ltd",
+        "notify_party": "Same",
+        "port_of_loading": "PORT KLANG",
+        "port_of_discharge": "SINGAPORE",
+        "container_count": "3",
+        "gross_weight_kg": "22000"
+      },
+      "doc2_type": "BL",
+      "doc2_data": {
+        "shipper": "ABC Corp",
+        "consignee": "XYZ Ltd",
+        "notify_party": "Same",
+        "port_of_loading": "PORT KLANG",
+        "port_of_discharge": "SINGAPORE",
+        "container_count": "3",
+        "gross_weight_kg": "22000"
+      }
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "ABC Corp",
+        "BL": "ABC Corp",
+        "normalized_SI": "abc corp",
+        "normalized_BL": "abc corp"
+      },
+      "consignee": {
+        "SI": "XYZ Ltd",
+        "BL": "XYZ Ltd",
+        "normalized_SI": "xyz ltd",
+        "normalized_BL": "xyz ltd"
+      },
+      "notify_party": {
+        "SI": "Same",
+        "BL": "Same",
+        "normalized_SI": "same",
+        "normalized_BL": "same"
+      },
+      "port_of_loading": {
+        "SI": "PORT KLANG",
+        "BL": "PORT KLANG",
+        "normalized_SI": "port klang",
+        "normalized_BL": "port klang"
+      },
+      "port_of_discharge": {
+        "SI": "SINGAPORE",
+        "BL": "SINGAPORE",
+        "normalized_SI": "singapore",
+        "normalized_BL": "singapore"
+      },
+      "container_count": {
+        "SI": "3",
+        "BL": "3",
+        "normalized_SI": 3,
+        "normalized_BL": 3
+      },
+      "gross_weight_kg": {
+        "SI": "22000",
+        "BL": "22000",
+        "normalized_SI": 22000.0,
+        "normalized_BL": 22000.0
+      }
+    },
+    "corrections": [
+      {
+        "document_type": "BL",
+        "field": "gross_weight_kg",
+        "old_value": null,
+        "new_value": "22000",
+        "corrected_at": "2026-09-19T15:28:53.087770+00:00"
+      }
+    ],
+    "final_result": {
+      "status": "OK",
+      "review_reason": null,
+      "has_defect": false,
+      "defect_fields": [],
+      "side_by_side": {
+        "shipper": {
+          "SI": "ABC Corp",
+          "BL": "ABC Corp",
+          "normalized_SI": "abc corp",
+          "normalized_BL": "abc corp"
+        },
+        "consignee": {
+          "SI": "XYZ Ltd",
+          "BL": "XYZ Ltd",
+          "normalized_SI": "xyz ltd",
+          "normalized_BL": "xyz ltd"
+        },
+        "notify_party": {
+          "SI": "Same",
+          "BL": "Same",
+          "normalized_SI": "same",
+          "normalized_BL": "same"
+        },
+        "port_of_loading": {
+          "SI": "PORT KLANG",
+          "BL": "PORT KLANG",
+          "normalized_SI": "port klang",
+          "normalized_BL": "port klang"
+        },
+        "port_of_discharge": {
+          "SI": "SINGAPORE",
+          "BL": "SINGAPORE",
+          "normalized_SI": "singapore",
+          "normalized_BL": "singapore"
+        },
+        "container_count": {
+          "SI": "3",
+          "BL": "3",
+          "normalized_SI": 3,
+          "normalized_BL": 3
+        },
+        "gross_weight_kg": {
+          "SI": "22000",
+          "BL": "22000",
+          "normalized_SI": 22000.0,
+          "normalized_BL": 22000.0
+        }
+      },
+      "message": "No mismatch detected."
+    },
+    "reviewer_note": "The missing Bill of Lading gross weight was checked and entered.",
+    "created_at": "2026-09-19T15:28:53.087341+00:00",
+    "updated_at": "2026-09-19T15:28:53.088783+00:00",
+    "resolved_at": "2026-09-19T15:28:53.088770+00:00"
+  }
+]
