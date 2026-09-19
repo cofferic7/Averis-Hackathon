@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Your generated outputs — every teammate will produce these locally
+*submission*.json
+!data_v2/sample_submission.json
+scoreboard*.json
+
+# Docker
+*.log
+
+# OS
+.DS_Store
