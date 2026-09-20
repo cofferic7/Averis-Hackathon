@@ -1,0 +1,275 @@
+[
+  {
+    "review_id": "52f8361c-0011-4444-8c43-127e8f4bd39d",
+    "email_id": "email_003",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_003",
+      "SI": null,
+      "BL": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_003",
+      "SI": null,
+      "BL": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T11:01:26.797465+00:00",
+    "updated_at": "2026-09-20T11:01:26.797465+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "8d1d7fcc-53e8-4761-87d6-53baa3b1ac4c",
+    "email_id": "email_004",
+    "review_status": "PENDING",
+    "initial_status": "MISMATCH",
+    "review_reason": null,
+    "message": "Mismatch found in: consignee, notify_party",
+    "original_extraction_payload": {
+      "email_id": "email_004",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "EAST BRIGHT FZ-LLC",
+        "notify_party": "EAST BRIGHT FZ-LLC",
+        "port_of_loading": "NANTONG, CHINA (CNNTG)",
+        "port_of_discharge": "KARACHI, PAKISTAN (PKKHI)",
+        "container_count": 6,
+        "gross_weight_kg": 131058.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "UAB NOVAKOPA",
+        "notify_party": "UAB NOVAKOPA",
+        "port_of_loading": "NANTONG, CHINA (CNNTG)",
+        "port_of_discharge": "KARACHI, PAKISTAN (PKKHI)",
+        "container_count": 6,
+        "gross_weight_kg": 131058.0
+      },
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_004",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "EAST BRIGHT FZ-LLC",
+        "notify_party": "EAST BRIGHT FZ-LLC",
+        "port_of_loading": "NANTONG, CHINA (CNNTG)",
+        "port_of_discharge": "KARACHI, PAKISTAN (PKKHI)",
+        "container_count": 6,
+        "gross_weight_kg": 131058.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "UAB NOVAKOPA",
+        "notify_party": "UAB NOVAKOPA",
+        "port_of_loading": "NANTONG, CHINA (CNNTG)",
+        "port_of_discharge": "KARACHI, PAKISTAN (PKKHI)",
+        "container_count": 6,
+        "gross_weight_kg": 131058.0
+      },
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "APRIL FAR EAST (M) SDN BHD",
+        "BL": "APRIL FAR EAST (M) SDN BHD",
+        "normalized_SI": "april far east (m) sdn bhd",
+        "normalized_BL": "april far east (m) sdn bhd"
+      },
+      "consignee": {
+        "SI": "EAST BRIGHT FZ-LLC",
+        "BL": "UAB NOVAKOPA",
+        "normalized_SI": "east bright fz-llc",
+        "normalized_BL": "uab novakopa"
+      },
+      "notify_party": {
+        "SI": "EAST BRIGHT FZ-LLC",
+        "BL": "UAB NOVAKOPA",
+        "normalized_SI": "east bright fz-llc",
+        "normalized_BL": "uab novakopa"
+      },
+      "port_of_loading": {
+        "SI": "NANTONG, CHINA (CNNTG)",
+        "BL": "NANTONG, CHINA (CNNTG)",
+        "normalized_SI": "nantong, china (cnntg)",
+        "normalized_BL": "nantong, china (cnntg)"
+      },
+      "port_of_discharge": {
+        "SI": "KARACHI, PAKISTAN (PKKHI)",
+        "BL": "KARACHI, PAKISTAN (PKKHI)",
+        "normalized_SI": "karachi, pakistan (pkkhi)",
+        "normalized_BL": "karachi, pakistan (pkkhi)"
+      },
+      "container_count": {
+        "SI": 6,
+        "BL": 6,
+        "normalized_SI": 6,
+        "normalized_BL": 6
+      },
+      "gross_weight_kg": {
+        "SI": 131058.0,
+        "BL": 131058.0,
+        "normalized_SI": 131058.0,
+        "normalized_BL": 131058.0
+      }
+    },
+    "initial_defect_fields": [
+      "consignee",
+      "notify_party"
+    ],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T11:01:30.743845+00:00",
+    "updated_at": "2026-09-20T11:01:30.743845+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "3e6b7a29-71cf-4d57-aa8e-77be365d405f",
+    "email_id": "email_006",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_006",
+      "SI": null,
+      "BL": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_006",
+      "SI": null,
+      "BL": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T11:01:35.872257+00:00",
+    "updated_at": "2026-09-20T11:01:35.872257+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "3b869a40-e4bc-4485-b352-bf345d55c51b",
+    "email_id": "email_009",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_value",
+    "message": "Missing or unusable value in: shipper, consignee, notify_party, port_of_loading, port_of_discharge, container_count, gross_weight_kg",
+    "original_extraction_payload": {
+      "email_id": "email_009",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "consignee": "PACIFIC OFFICE (M) SDN BHD",
+        "notify_party": "PACIFIC OFFICE (M) SDN BHD",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "port_of_discharge": "MERSIN, TURKEY (TRMER)",
+        "container_count": 1,
+        "gross_weight_kg": 20381.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": null,
+        "consignee": null,
+        "notify_party": null,
+        "port_of_loading": null,
+        "port_of_discharge": null,
+        "container_count": null,
+        "gross_weight_kg": null
+      },
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_009",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "consignee": "PACIFIC OFFICE (M) SDN BHD",
+        "notify_party": "PACIFIC OFFICE (M) SDN BHD",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "port_of_discharge": "MERSIN, TURKEY (TRMER)",
+        "container_count": 1,
+        "gross_weight_kg": 20381.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": null,
+        "consignee": null,
+        "notify_party": null,
+        "port_of_loading": null,
+        "port_of_discharge": null,
+        "container_count": null,
+        "gross_weight_kg": null
+      },
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "BL": null,
+        "normalized_SI": "asia pacific paperboard trading pte ltd",
+        "normalized_BL": null
+      },
+      "consignee": {
+        "SI": "PACIFIC OFFICE (M) SDN BHD",
+        "BL": null,
+        "normalized_SI": "pacific office (m) sdn bhd",
+        "normalized_BL": null
+      },
+      "notify_party": {
+        "SI": "PACIFIC OFFICE (M) SDN BHD",
+        "BL": null,
+        "normalized_SI": "pacific office (m) sdn bhd",
+        "normalized_BL": null
+      },
+      "port_of_loading": {
+        "SI": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "BL": null,
+        "normalized_SI": "port klang (westport), malaysia (mypkg)",
+        "normalized_BL": null
+      },
+      "port_of_discharge": {
+        "SI": "MERSIN, TURKEY (TRMER)",
+        "BL": null,
+        "normalized_SI": "mersin, turkey (trmer)",
+        "normalized_BL": null
+      },
+      "container_count": {
+        "SI": 1,
+        "BL": null,
+        "normalized_SI": 1,
+        "normalized_BL": null
+      },
+      "gross_weight_kg": {
+        "SI": 20381.0,
+        "BL": null,
+        "normalized_SI": 20381.0,
+        "normalized_BL": null
+      }
+    },
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T11:01:48.066337+00:00",
+    "updated_at": "2026-09-20T11:01:48.066337+00:00",
+    "resolved_at": null
+  }
+]
