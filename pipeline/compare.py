@@ -1,5 +1,4 @@
 import re
-
 from typing import Any, Dict, List, Optional
 
 
@@ -27,41 +26,42 @@ ALLOWED_REVIEW_REASONS = {
 
 
 # ============================================================
-# NORMALISATION FUNCTIONS
+# MISSING VALUE CHECK
 # ============================================================
 
 def is_missing(value: Any) -> bool:
     """
-    Return True when a value is empty or represents
-    missing data.
+    Check whether a value should be treated as missing.
     """
 
     if value is None:
         return True
 
-    text = str(value).strip().lower()
+    if isinstance(value, str):
+        cleaned = value.strip().casefold()
 
-    return text in {
-        "",
-        "missing",
-        "n/a",
-        "na",
-        "none",
-        "null",
-        "unknown",
-        "not available",
-    }
+        return cleaned in {
+            "",
+            "missing",
+            "n/a",
+            "na",
+            "none",
+            "null",
+            "unknown",
+            "not available",
+        }
+
+    return False
 
 
-def normalize_text(
-    value: Any,
-) -> Optional[str]:
+# ============================================================
+# TEXT NORMALIZATION
+# ============================================================
+
+def normalize_text(value: Any) -> Optional[str]:
     """
-    Normalise ordinary text fields.
-
-    Examples:
-    'PORT KLANG' and 'Port Klang' become the same value.
-    Extra spaces are also removed.
+    Normalize text so harmless differences such as
+    capitalization and extra spaces do not create mismatches.
     """
 
     if is_missing(value):
@@ -69,29 +69,30 @@ def normalize_text(
 
     text = str(value).strip()
 
-    # Change multiple spaces into one space
-    text = re.sub(r"\s+", " ", text)
+    text = re.sub(
+        r"\s+",
+        " ",
+        text,
+    )
 
-    # casefold() allows case-insensitive comparison
     return text.casefold()
 
 
-def extract_number(
-    value: Any,
-) -> Optional[float]:
-    """
-    Extract the first number from values such as:
+# ============================================================
+# NUMBER EXTRACTION
+# ============================================================
 
-    - '22,000 kg'
-    - '22000 KG'
-    - '3 containers'
-    - '3.0'
+def extract_number(value: Any) -> Optional[float]:
+    """
+    Extract the first numeric value from a field.
     """
 
     if is_missing(value):
         return None
 
-    text = str(value).replace(",", "").strip()
+    text = str(value).strip()
+
+    text = text.replace(",", "")
 
     match = re.search(
         r"-?\d+(?:\.\d+)?",
@@ -104,25 +105,43 @@ def extract_number(
     return float(match.group())
 
 
+# ============================================================
+# FIELD NORMALIZATION
+# ============================================================
+
 def normalize_field(
     field: str,
     value: Any,
-) -> Optional[Any]:
+) -> Any:
     """
-    Apply the correct normalisation rule based on
-    the field being compared.
+    Normalize a field according to its type.
     """
+
+    if is_missing(value):
+        return None
+
+    # --------------------------------------------------------
+    # Container count
+    # --------------------------------------------------------
 
     if field == "container_count":
+
         number = extract_number(value)
 
-        # Container count must be a whole number
-        if number is None or not number.is_integer():
+        if number is None:
+            return None
+
+        if not number.is_integer():
             return None
 
         return int(number)
 
+    # --------------------------------------------------------
+    # Gross weight
+    # --------------------------------------------------------
+
     if field == "gross_weight_kg":
+
         number = extract_number(value)
 
         if number is None:
@@ -130,12 +149,15 @@ def normalize_field(
 
         return number
 
-    # All other fields are text fields
+    # --------------------------------------------------------
+    # Text fields
+    # --------------------------------------------------------
+
     return normalize_text(value)
 
 
 # ============================================================
-# RESULT FUNCTION
+# RESULT BUILDER
 # ============================================================
 
 def make_result(
@@ -145,9 +167,6 @@ def make_result(
     side_by_side: Optional[Dict[str, Any]] = None,
     message: str = "",
 ) -> Dict[str, Any]:
-    """
-    Create one consistent comparison result.
-    """
 
     defects = defect_fields or []
 
@@ -169,164 +188,20 @@ def compare_shipment_data(
     extraction_payload: Dict[str, Any],
 ) -> Dict[str, Any]:
     """
-    Validate Member 2's extracted documents and
-    compare the seven required fields.
+    Compare SI and BL data produced by the
+    attachment extraction stage.
     """
 
-    # This function is only for BL comparison emails
-    if (
-        extraction_payload.get("email_category")
-        != "BL_COMPARISON"
-    ):
-        return make_result(
-            status="NOT_APPLICABLE",
-            review_reason=None,
-            message=(
-                "This email does not require "
-                "document comparison."
-            ),
-        )
+    # --------------------------------------------------------
+    # Get SI and BL directly from extraction output
+    # --------------------------------------------------------
 
-    # ========================================================
-    # STEP 1: CHECK ATTACHMENTS
-    # ========================================================
+    si_raw = extraction_payload.get("SI")
+    bl_raw = extraction_payload.get("BL")
 
-    if (
-        extraction_payload.get("attachments_present")
-        is not True
-    ):
-        return make_result(
-            status="NEEDS_REVIEW",
-            review_reason="missing_attachment",
-            message=(
-                "The Shipping Instruction or "
-                "Bill of Lading is missing."
-            ),
-        )
-
-    # ========================================================
-    # STEP 2: CHECK EXTRACTION ERRORS
-    # ========================================================
-
-    extraction_errors = extraction_payload.get(
-        "extraction_errors"
-    )
-
-    if extraction_errors:
-        return make_result(
-            status="NEEDS_REVIEW",
-            review_reason="unreadable",
-            message=(
-                "Document extraction failed: "
-                f"{extraction_errors}"
-            ),
-        )
-
-    # ========================================================
-    # STEP 3: GET DOCUMENTS FROM MEMBER 2
-    # ========================================================
-
-    documents = extraction_payload.get(
-        "documents",
-        [],
-    )
-
-    if not isinstance(documents, list):
-        return make_result(
-            status="NEEDS_REVIEW",
-            review_reason="unreadable",
-            message=(
-                "The extracted documents are not "
-                "in the expected list format."
-            ),
-        )
-
-    if not documents:
-        return make_result(
-            status="NEEDS_REVIEW",
-            review_reason="missing_attachment",
-            message=(
-                "No Shipping Instruction or "
-                "Bill of Lading was provided."
-            ),
-        )
-
-    si_raw = None
-    bl_raw = None
-    unknown_document_types = []
-
-    # Read each document returned by Member 2
-    for document in documents:
-
-        if not isinstance(document, dict):
-            return make_result(
-                status="NEEDS_REVIEW",
-                review_reason="unreadable",
-                message=(
-                    "One extracted document is not "
-                    "in the expected format."
-                ),
-            )
-
-        document_type = str(
-            document.get("document_type", "")
-        ).strip().upper()
-
-        document_data = document.get("data")
-
-        # Store the SI data
-        if document_type == "SI":
-
-            # More than one SI was provided
-            if si_raw is not None:
-                return make_result(
-                    status="NEEDS_REVIEW",
-                    review_reason="wrong_doc_type",
-                    message=(
-                        "More than one Shipping "
-                        "Instruction was provided."
-                    ),
-                )
-
-            si_raw = document_data
-
-        # Store the BL data
-        elif document_type == "BL":
-
-            # More than one BL was provided
-            if bl_raw is not None:
-                return make_result(
-                    status="NEEDS_REVIEW",
-                    review_reason="wrong_doc_type",
-                    message=(
-                        "More than one Bill of "
-                        "Lading was provided."
-                    ),
-                )
-
-            bl_raw = document_data
-
-        # The document is not SI or BL
-        else:
-            unknown_document_types.append(
-                document_type or "UNKNOWN"
-            )
-
-    # An incorrect document type was found
-    if unknown_document_types:
-        return make_result(
-            status="NEEDS_REVIEW",
-            review_reason="wrong_doc_type",
-            message=(
-                "Unknown document type(s): "
-                + ", ".join(unknown_document_types)
-                + ". Expected only SI and BL."
-            ),
-        )
-
-    # ========================================================
-    # STEP 4: CHECK WHETHER SI AND BL ARE AVAILABLE
-    # ========================================================
+    # --------------------------------------------------------
+    # Check whether required documents exist
+    # --------------------------------------------------------
 
     missing_documents = []
 
@@ -346,7 +221,10 @@ def compare_shipment_data(
             ),
         )
 
-    # Check that Member 2 returned dictionary data
+    # --------------------------------------------------------
+    # Check that SI and BL are dictionaries
+    # --------------------------------------------------------
+
     if (
         not isinstance(si_raw, dict)
         or not isinstance(bl_raw, dict)
@@ -360,9 +238,9 @@ def compare_shipment_data(
             ),
         )
 
-    # ========================================================
-    # STEP 5: COMPARE THE SEVEN FIELDS
-    # ========================================================
+    # --------------------------------------------------------
+    # Compare the seven required fields
+    # --------------------------------------------------------
 
     defect_fields = []
     missing_fields = []
@@ -383,7 +261,6 @@ def compare_shipment_data(
             raw_bl_value,
         )
 
-        # Store the original and normalised values
         side_by_side[field] = {
             "SI": raw_si_value,
             "BL": raw_bl_value,
@@ -391,22 +268,27 @@ def compare_shipment_data(
             "normalized_BL": normalized_bl,
         }
 
-        # If either value is missing, human review is needed
+        # ----------------------------------------------------
+        # Missing value
+        # ----------------------------------------------------
+
         if (
             normalized_si is None
             or normalized_bl is None
         ):
             missing_fields.append(field)
 
-        # Both values exist but they are different
+        # ----------------------------------------------------
+        # Actual mismatch
+        # ----------------------------------------------------
+
         elif normalized_si != normalized_bl:
             defect_fields.append(field)
 
-    # ========================================================
-    # STEP 6: RETURN THE FINAL RESULT
-    # ========================================================
+    # --------------------------------------------------------
+    # Missing values take priority over mismatch
+    # --------------------------------------------------------
 
-    # Missing values mean the comparison is incomplete
     if missing_fields:
         return make_result(
             status="NEEDS_REVIEW",
@@ -419,7 +301,10 @@ def compare_shipment_data(
             ),
         )
 
-    # All fields are available, but some values differ
+    # --------------------------------------------------------
+    # Mismatch
+    # --------------------------------------------------------
+
     if defect_fields:
         return make_result(
             status="MISMATCH",
@@ -432,7 +317,10 @@ def compare_shipment_data(
             ),
         )
 
-    # All seven fields are available and match
+    # --------------------------------------------------------
+    # Everything matches
+    # --------------------------------------------------------
+
     return make_result(
         status="OK",
         review_reason=None,
@@ -442,113 +330,40 @@ def compare_shipment_data(
     )
 
 
-# ==========================================
-# TEST EXAMPLES / DEMO
-# ==========================================
-if __name__ == "__main__":
-    import json
+# ============================================================
+# SIMPLE TEST
+# ============================================================
 
-    # ========================================================
-    # TEST 1: VALID SI AND BL WITH ONE MISMATCH
-    # ========================================================
+if __name__ == "__main__":
 
     sample_payload = {
-        "email_category": "BL_COMPARISON",
-        "attachments_present": True,
-        "extraction_errors": None,
+        "email_id": "test_001",
 
-        "documents": [
-            {
-                "document_type": "SI",
-                "data": {
-                    "shipper": "ABC Logistics",
-                    "consignee": "XYZ Corp",
-                    "notify_party": "Same",
-                    "port_of_loading": "PORT KLANG",
-                    "port_of_discharge": "SINGAPORE",
-                    "container_count": "3",
-                    "gross_weight_kg": "22000",
-                },
-            },
-            {
-                "document_type": "BL",
-                "data": {
-                    "shipper": "ABC Logistics",
-                    "consignee": "XYZ Corp",
-                    "notify_party": "Same",
-                    "port_of_loading": "Port Klang",
-                    "port_of_discharge": "SINGAPORE",
+        "SI": {
+            "document_type": "SI",
+            "shipper": "ABC Logistics",
+            "consignee": "XYZ Corp",
+            "notify_party": "Same",
+            "port_of_loading": "PORT KLANG",
+            "port_of_discharge": "SINGAPORE",
+            "container_count": 3,
+            "gross_weight_kg": 22000,
+        },
 
-                    # Mismatch: SI is 3 but BL is 4
-                    "container_count": "4",
-
-                    # This should match 22000 after normalisation
-                    "gross_weight_kg": "22,000",
-                },
-            },
-        ],
+        "BL": {
+            "document_type": "BL",
+            "shipper": "ABC Logistics",
+            "consignee": "XYZ Corp",
+            "notify_party": "Same",
+            "port_of_loading": "Port Klang",
+            "port_of_discharge": "SINGAPORE",
+            "container_count": 4,
+            "gross_weight_kg": 22000,
+        },
     }
 
-
-    # ========================================================
-    # TEST 2: INVALID DOCUMENT TYPES - TWO SI DOCUMENTS
-    # ========================================================
-
-    invalid_type_payload = {
-        "email_category": "BL_COMPARISON",
-        "attachments_present": True,
-        "extraction_errors": None,
-
-        "documents": [
-            {
-                "document_type": "SI",
-                "data": {
-                    "shipper": "ABC Logistics",
-                    "consignee": "XYZ Corp",
-                    "notify_party": "Same",
-                    "port_of_loading": "Port Klang",
-                    "port_of_discharge": "Singapore",
-                    "container_count": "3",
-                    "gross_weight_kg": "22000",
-                },
-            },
-            {
-                # Error: this should be BL
-                "document_type": "SI",
-                "data": {
-                    "shipper": "ABC Logistics",
-                    "consignee": "XYZ Corp",
-                    "notify_party": "Same",
-                    "port_of_loading": "Port Klang",
-                    "port_of_discharge": "Singapore",
-                    "container_count": "3",
-                    "gross_weight_kg": "22000",
-                },
-            },
-        ],
-    }
-
-
-    # ========================================================
-    # RUN THE TESTS
-    # ========================================================
-
-    print("--- Test 1: Mismatch Handling ---")
-
-    print(
-        json.dumps(
-            compare_shipment_data(sample_payload),
-            indent=2,
-        )
+    result = compare_shipment_data(
+        sample_payload
     )
 
-
-    print("\n--- Test 2: Invalid Document Types ---")
-
-    print(
-        json.dumps(
-            compare_shipment_data(invalid_type_payload),
-            indent=2,
-        )
-    )
-
+    print(result)
