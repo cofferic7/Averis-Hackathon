@@ -28,7 +28,7 @@ def process_single_email(email: dict, data_dir: str):
         return build_entry(category, "OK", None, False, [])
 
     extraction = extract_email_fields(email, data_dir)
-    result = compare_shipment_data(extraction)
+    result = compare_shipment_data(extraction, email.get("body",""))
 
     entry = build_entry(category, result["status"], result["review_reason"], result["has_defect"], result["defect_fields"])
 
