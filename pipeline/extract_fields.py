@@ -8,9 +8,9 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
-from extract_attachments import extract
-from llm_client import call_llm as gemini_text
-from config import ALIASES
+from pipeline.extract_attachments import extract
+from pipeline.llm_client import call_llm as gemini_text
+from pipeline.config import ALIASES
 from server.loader import Inbox
 
 
@@ -275,9 +275,13 @@ def extract_fields(
         issues.append(
             f"extraction: {extracted.warning}"
         )
+        meta["status"] = "needs_review"
+        meta["escalation_reason"] = "unreadable"   # NEW: explicit, unmissable signal
+        return doc
 
     if not extracted.text.strip():
         meta["status"] = "needs_review"
+        meta["escalation_reason"] = "unreadable"
         return doc
 
     try:
@@ -296,35 +300,28 @@ def extract_fields(
             getattr(result, field)
         )
 
-    content_type = (
-        result.document_type_from_content or ""
-    ).upper()
-
-    if content_type not in ("SI", "BL"):
-        content_type = None
-
+        content_type_raw = (result.document_type_from_content or "").strip().upper()
     filename_type = doc["document_type"]
 
-    if (
-        filename_type
-        and content_type
-        and filename_type != content_type
-    ):
-        issues.append(
-            f"document_type conflict: filename says "
-            f"{filename_type}, content looks like "
-            f"{content_type}"
-        )
+    if content_type_raw not in ("SI", "BL"):
+        if filename_type:
+            issues.append(
+                f"document_type conflict: filename says {filename_type}, "
+                f"content looks like '{content_type_raw or 'neither SI nor BL'}'"
+            )
+            meta["escalation_reason"] = "wrong_doc_type"
+        content_type = None
+    else:
+        content_type = content_type_raw
+        if filename_type and content_type != filename_type:
+            issues.append(f"document_type conflict: filename says {filename_type}, content looks like {content_type}")
+            meta["escalation_reason"] = "wrong_doc_type"
 
-    doc["document_type"] = (
-        doc["document_type"]
-        or content_type
-    )
+    doc["document_type"] = content_type or filename_type
 
     if doc["document_type"] is None:
         issues.append(
-            "document_type: cannot tell if this "
-            "is SI or BL"
+            "document_type: cannot tell if this is SI or BL"
         )
 
     issues += verify(
@@ -341,61 +338,20 @@ def extract_fields(
     return doc
 
 
-def process_email(
-    email: dict,
-    data_dir: str,
-    llm=call_llm,
-) -> dict:
-
-    output = {
-        "email_id": email["email_id"],
-        "SI": None,
-        "BL": None,
-    }
-
-    attachments = email.get("attachments") or []
-
-    for relative_path in attachments:
-
+def process_email(email: dict, data_dir: str, llm=call_llm) -> dict:
+    output = {"email_id": email["email_id"], "SI": None, "BL": None, "escalation_reason": None}
+    for relative_path in email.get("attachments") or []:
         path = Path(data_dir) / relative_path
-
-        document = extract_fields(
-            str(path),
-            llm,
-        )
-
+        document = extract_fields(str(path), llm)
         document_type = document["document_type"]
 
-        if (
-            document_type == "SI"
-            and output["SI"] is None
-        ):
-            output["SI"] = {
-                "document_type": document["document_type"],
-                "shipper": document["shipper"],
-                "consignee": document["consignee"],
-                "notify_party": document["notify_party"],
-                "port_of_loading": document["port_of_loading"],
-                "port_of_discharge": document["port_of_discharge"],
-                "container_count": document["container_count"],
-                "gross_weight_kg": document["gross_weight_kg"],
-            }
+        if document.get("_meta", {}).get("escalation_reason") and not output["escalation_reason"]:
+            output["escalation_reason"] = document["_meta"]["escalation_reason"]
 
-        elif (
-            document_type == "BL"
-            and output["BL"] is None
-        ):
-            output["BL"] = {
-                "document_type": document["document_type"],
-                "shipper": document["shipper"],
-                "consignee": document["consignee"],
-                "notify_party": document["notify_party"],
-                "port_of_loading": document["port_of_loading"],
-                "port_of_discharge": document["port_of_discharge"],
-                "container_count": document["container_count"],
-                "gross_weight_kg": document["gross_weight_kg"],
-            }
-
+        if document_type == "SI" and output["SI"] is None:
+            output["SI"] = {k: document[k] for k in ["document_type"] + ALL_FIELDS}
+        elif document_type == "BL" and output["BL"] is None:
+            output["BL"] = {k: document[k] for k in ["document_type"] + ALL_FIELDS}
     return output
 
 
