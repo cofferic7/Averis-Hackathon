@@ -2,7 +2,12 @@ import re
 from typing import Any, Dict, List, Optional
 
 PLACEHOLDER_RUN = re.compile(r"_{2,}")
-
+MISSING_ATTACHMENT_SIGNAL = re.compile(
+    r"\b(draft\s*BL\s*is\s*still\s*missing|"
+    r"attachments?\s*appear[s]?\s*to\s*(have\s*been\s*)?dropped|"
+    r"attachments?\s*(seem|appear)s?\s*(to\s*be\s*)?missing)\b",
+    re.IGNORECASE,
+)
 # ============================================================
 # CONSTANTS
 # ============================================================
@@ -16,6 +21,7 @@ REQUIRED_FIELDS = [
     "container_count",
     "gross_weight_kg",
 ]
+
 
 
 ALLOWED_REVIEW_REASONS = {
@@ -176,9 +182,7 @@ def make_result(
 # MAIN COMPARISON FUNCTION
 # ============================================================
 
-def compare_shipment_data(
-    extraction_payload: Dict[str, Any],
-) -> Dict[str, Any]:
+def compare_shipment_data(extraction_payload: Dict[str, Any],email_body: str = "") -> Dict[str, Any]:
     """
     Compare SI and BL data produced by the
     attachment extraction stage.
@@ -208,13 +212,19 @@ def compare_shipment_data(
         missing_documents.append("BL")
 
     if missing_documents:
+        # both missing AND no explicit "missing/dropped" signal in the body
+        # -> ordinary "please send the draft BL" request, not an error case
+        if len(missing_documents) == 2 and not MISSING_ATTACHMENT_SIGNAL.search(email_body):
+            return make_result(
+                status="OK",
+                review_reason=None,
+                message="No attachments yet — request for future documents.",
+            )
+
         return make_result(
             status="NEEDS_REVIEW",
             review_reason="missing_attachment",
-            message=(
-                "Missing required document(s): "
-                + ", ".join(missing_documents)
-            ),
+            message="Missing required document(s): " + ", ".join(missing_documents),
         )
 
     # --------------------------------------------------------

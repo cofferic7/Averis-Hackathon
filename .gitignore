@@ -13,4 +13,7 @@ scoreboard*.json
 *.log
 
 # OS
-.DS_Store
+.DS_Storeoutput/*_eric.json
+output/*_chloe.json
+output/*_anson.json
+output/review_cases_eric.json
