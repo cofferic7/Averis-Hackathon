@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect} from "react";
+import { useMemo, useState, useEffect } from "react";
 import { getResults } from "@/lib/api";
 
 type ReviewStatus = "MISMATCH" | "NEEDS_REVIEW";
@@ -120,16 +120,33 @@ function CaseDetail({
         </div>
     );
 
-    
+
 
 
     if (isMismatch) {
-        const defectField = item.raw?.defect_fields?.[0];
+        // Include every backend defect and any additional visible differences.
+        // The latter also covers older reports that recorded only the first defect.
+        const allFields = Object.keys(fieldLabels);
+        const comparable = (field: string, value: any) => {
+            if (value === null || value === undefined || String(value).trim() === "") return null;
+            const text = String(value).trim();
+            if (field === "container_count" || field === "gross_weight_kg") {
+                const match = text.replace(/,/g, "").match(/-?\d+(?:\.\d+)?/);
+                return match ? Number(match[0]) : null;
+            }
+            return text.replace(/\s+/g, " ").toLocaleLowerCase();
+        };
+        const defectFields = Array.from(new Set<string>([
+            ...(Array.isArray(item.raw?.defect_fields) ? item.raw.defect_fields : []),
+            ...allFields.filter((field) => {
+                const siValue = comparable(field, si[field]);
+                const blValue = comparable(field, bl[field]);
+                return siValue !== null && blValue !== null && siValue !== blValue;
+            }),
+        ])).filter((field) => field in fieldLabels);
+        const defectField = defectFields[0];
         const defectLabel =
             fieldLabels[defectField] || "Document mismatch";
-
-        const siDefectValue = si?.[defectField];
-        const blDefectValue = bl?.[defectField];
 
         return (
             <section className="detail-page">
@@ -149,23 +166,6 @@ function CaseDetail({
                     <span className="status mismatch">
                         ▲ Mismatch
                     </span>
-                </div>
-
-                <div className="alert-box">
-                    <b>!</b>
-                    <div>
-                        <strong>
-                            The documents disagree on {defectLabel.toLowerCase()}.
-                        </strong>
-
-                        <p>
-                            Shipping Instruction:{" "}
-                            <b>{formatValue(siDefectValue)}</b>
-                            {" · "}
-                            Bill of Lading:{" "}
-                            <b>{formatValue(blDefectValue)}</b>
-                        </p>
-                    </div>
                 </div>
 
                 <div className="document-grid">
@@ -195,39 +195,44 @@ function CaseDetail({
                         <dl>
                             {renderDocumentField(
                                 "Shipper",
-                                si.shipper
+                                si.shipper,
+                                defectFields.includes("shipper")
                             )}
 
                             {renderDocumentField(
                                 "Consignee",
-                                si.consignee
+                                si.consignee,
+                                defectFields.includes("consignee")
                             )}
 
                             {renderDocumentField(
                                 "Notify Party",
-                                si.notify_party
+                                si.notify_party,
+                                defectFields.includes("notify_party")
                             )}
 
                             {renderDocumentField(
                                 "Port of loading",
-                                si.port_of_loading
+                                si.port_of_loading,
+                                defectFields.includes("port_of_loading")
                             )}
 
                             {renderDocumentField(
                                 "Port of discharge",
-                                si.port_of_discharge
+                                si.port_of_discharge,
+                                defectFields.includes("port_of_discharge")
                             )}
 
                             {renderDocumentField(
                                 "Container count",
                                 si.container_count,
-                                defectField === "container_count"
+                                defectFields.includes("container_count")
                             )}
 
                             {renderDocumentField(
                                 "Gross weight (kg)",
                                 si.gross_weight_kg,
-                                defectField === "gross_weight_kg"
+                                defectFields.includes("gross_weight_kg")
                             )}
                         </dl>
                     </article>
@@ -258,83 +263,71 @@ function CaseDetail({
                         <dl>
                             {renderDocumentField(
                                 "Shipper",
-                                bl.shipper
+                                bl.shipper,
+                                defectFields.includes("shipper")
                             )}
 
                             {renderDocumentField(
                                 "Consignee",
-                                bl.consignee
+                                bl.consignee,
+                                defectFields.includes("consignee")
                             )}
 
                             {renderDocumentField(
                                 "Notify Party",
-                                bl.notify_party
+                                bl.notify_party,
+                                defectFields.includes("notify_party")
                             )}
 
                             {renderDocumentField(
                                 "Port of loading",
-                                bl.port_of_loading
+                                bl.port_of_loading,
+                                defectFields.includes("port_of_loading")
                             )}
 
                             {renderDocumentField(
                                 "Port of discharge",
-                                bl.port_of_discharge
+                                bl.port_of_discharge,
+                                defectFields.includes("port_of_discharge")
                             )}
 
                             {renderDocumentField(
                                 "Container count",
                                 bl.container_count,
-                                defectField === "container_count"
+                                defectFields.includes("container_count")
                             )}
 
                             {renderDocumentField(
                                 "Gross weight (kg)",
                                 bl.gross_weight_kg,
-                                defectField === "gross_weight_kg"
+                                defectFields.includes("gross_weight_kg")
                             )}
                         </dl>
                     </article>
                 </div>
 
                 <div className="resolution-grid">
-                    <article className="info-card">
-                        <h3>Shipment details</h3>
-
-                        <div className="mini-grid">
-                            <span>
-                                Email ID
-                                <strong>{item.emailId}</strong>
-                            </span>
-
-                            <span>
-                                Subject
-                                <strong>
-                                    {item.raw?.subject || "Not available"}
-                                </strong>
-                            </span>
-
-                            <span>
-                                Shipper
-                                <strong>
-                                    {formatValue(si.shipper)}
-                                </strong>
-                            </span>
-
-                            <span>
-                                Consignee
-                                <strong>
-                                    {formatValue(si.consignee)}
-                                </strong>
-                            </span>
-                        </div>
+                    <article className="info-card mismatch-details-card">
+                        <h3>Mismatch details</h3>
+                        <strong className="mismatch-summary">
+                            {defectFields.length ? `The documents disagree on ${defectFields.length} ${defectFields.length === 1 ? "field" : "fields"}.` : "Review the document differences."}
+                        </strong>
+                        {defectFields.map((field) => (
+                            <div className="mismatch-detail-row" key={field}>
+                                <h4>{fieldLabels[field]}</h4>
+                                <p>Shipping Instruction: <strong>{formatValue(si[field])}</strong></p>
+                                <p>Bill of Lading: <strong>{formatValue(bl[field])}</strong></p>
+                            </div>
+                        ))}
                     </article>
 
                     <article className="resolve-card">
                         <h3>Resolve mismatch</h3>
 
                         <p>
-                            Which value should be accepted for{" "}
-                            {defectLabel.toLowerCase()}?
+                            {defectFields.length > 1
+                                ? "Which document should be accepted for the mismatched fields?"
+                                : <>Which value should be accepted for {defectLabel.toLowerCase()}?</>}
                         </p>
 
                         <div className="choice-row">
@@ -838,16 +831,16 @@ export default function ReviewQueue() {
 
                     // These are only display values for the table.
                     // The actual backend object is kept in raw.
-                    si:item.si && Object.values(item.si).some(
-                            (value) => value !== null && value !== undefined && value !== "")
-                            ? "Available"
-                            : "Not available",
+                    si: item.si && Object.values(item.si).some(
+                        (value) => value !== null && value !== undefined && value !== "")
+                        ? "Available"
+                        : "Not available",
 
                     bl:
                         item.bl &&
-                        Object.values(item.bl).some(
-                            (value) => value !== null && value !== undefined && value !== ""
-                        )
+                            Object.values(item.bl).some(
+                                (value) => value !== null && value !== undefined && value !== ""
+                            )
                             ? "Available"
                             : "Not available",
 
@@ -868,20 +861,20 @@ export default function ReviewQueue() {
     }, [data]);
 
     const filteredCases = useMemo(() => {
-    const search = query.trim().toLowerCase();
+        const search = query.trim().toLowerCase();
 
-    return reviewCases.filter((item) => {
-        const matchesSearch =
-            !search ||
-            item.emailId.toLowerCase().includes(search) ||
-            item.issue.toLowerCase().includes(search);
+        return reviewCases.filter((item) => {
+            const matchesSearch =
+                !search ||
+                item.emailId.toLowerCase().includes(search) ||
+                item.issue.toLowerCase().includes(search);
 
-        const matchesStatus =
-            status === "ALL" || item.status === status;
+            const matchesStatus =
+                status === "ALL" || item.status === status;
 
-        return matchesSearch && matchesStatus;
-    });
-}, [query, status, reviewCases]);
+            return matchesSearch && matchesStatus;
+        });
+    }, [query, status, reviewCases]);
 
     return (
         <div className="review-app">
@@ -1919,6 +1912,7 @@ export default function ReviewQueue() {
             <style>{`.sidebar nav button{width:100%;height:48px;padding:0 13px;display:flex;align-items:center;gap:13px;border:0;border-radius:10px;color:#bcd0e8;background:transparent;font:inherit;font-size:14px;text-align:left;cursor:pointer;transition:.2s}.sidebar nav button:hover{background:rgba(255,255,255,.07);color:#fff;transform:translateX(2px)}.sidebar nav button.active{color:#fff;background:linear-gradient(90deg,#0964ce,#217ce0);box-shadow:0 9px 22px rgba(0,73,174,.35)}.sidebar nav button svg{width:19px;height:19px}.sidebar nav button b{margin-left:auto;min-width:23px;height:23px;padding:0 6px;display:grid;place-items:center;border-radius:999px;background:rgba(255,255,255,.18);font-size:11px}.resolved-page{padding:30px;max-width:1500px;margin:auto}.resolved-heading{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px}.resolved-heading h1{margin:5px 0 4px;font-size:31px}.resolved-heading p{margin:0;color:#687b99;font-size:14px}.export-button{height:39px;padding:0 15px;border:1px solid #cddaea;border-radius:9px;background:#fff;color:#24577f;font-weight:700;cursor:pointer}.resolved-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.resolved-toolbar{padding:20px;display:flex;align-items:center;gap:10px}.resolved-toolbar>div{margin-right:auto}.resolved-toolbar h2{margin:0;font-size:17px}.resolved-toolbar p{margin:4px 0 0;color:#8997aa;font-size:10px}.resolved-toolbar .search-box{width:320px}.resolved-toolbar select{height:40px;padding:0 32px 0 12px;border:1px solid #d7e1ed;border-radius:9px;background:#fff;color:#526781}.final-result{display:inline-block;padding:6px 11px;border-radius:999px;font-size:9px;font-weight:800}.final-result.approved{background:#d8f4e6;color:#08784f}.final-result.corrected{background:#fff0cd;color:#ad6700}.final-result.rejected{background:#ffe0e4;color:#d32039}.view-button{height:32px;padding:0 13px;border:1px solid #0871ea;border-radius:7px;background:#fff;color:#0869d8;font-size:10px;font-weight:800;cursor:pointer}.view-button:hover{background:#0871ea;color:#fff}.resolved-page .panel-footer button{width:auto;min-width:30px;padding:0 10px}.resolved-detail{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0}.resolved-detail span{padding:13px;border-radius:9px;background:#f4f8fd;color:#7889a0;font-size:10px}.resolved-detail strong{display:block;margin-top:5px;color:#203652;font-size:12px}.final-text.approved{color:#08784f}.final-text.corrected{color:#ad6700}.final-text.rejected{color:#d32039}@media(max-width:1050px){.resolved-stats{grid-template-columns:1fr 1fr}.sidebar nav button span,.sidebar nav button b{display:none}.sidebar nav button{justify-content:center}}@media(max-width:760px){.resolved-page{padding:20px 14px}.resolved-toolbar{flex-wrap:wrap}.resolved-toolbar>div{width:100%}.resolved-toolbar .search-box{width:100%}.resolved-stats{grid-template-columns:1fr 1fr}.resolved-heading p{font-size:12px}}@media(max-width:430px){.resolved-stats{grid-template-columns:1fr}.resolved-detail{grid-template-columns:1fr}}`}</style>
             <style>{`.dashboard-page{padding:30px;max-width:1500px;margin:auto}.dashboard-heading{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:21px}.dashboard-heading h1{margin:5px 0 4px;font-size:31px;letter-spacing:-.7px}.dashboard-heading p{margin:0;color:#687b99;font-size:14px}.category-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.category-title h2{margin:0;font-size:15px}.category-title button{padding:7px 11px;border:1px solid #d4dfeb;border-radius:8px;background:#fff;color:#5d718c;font-size:10px;font-weight:700;cursor:pointer}.category-title button.all-active{border-color:#1675df;background:#eaf3ff;color:#0864cf}.email-category-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:18px}.email-category-card{min-height:118px;padding:17px;display:flex;align-items:center;gap:12px;border:1px solid #dce5f1;border-radius:13px;background:#fff;color:#18304f;text-align:left;box-shadow:0 5px 18px rgba(29,63,105,.045);cursor:pointer;transition:.2s}.email-category-card:hover{transform:translateY(-3px);box-shadow:0 12px 25px rgba(29,63,105,.11)}.email-category-card.selected{border-color:#1977e2;box-shadow:0 0 0 3px rgba(25,119,226,.13),0 12px 25px rgba(29,63,105,.1)}.category-icon{width:44px;height:44px;display:grid;place-items:center;flex:none;border-radius:50%;font-size:19px;font-weight:800}.email-category-card>span:last-child{min-width:0}.email-category-card small,.email-category-card strong,.email-category-card em{display:block}.email-category-card small{min-height:27px;color:#627692;font-size:10px;line-height:1.25}.email-category-card strong{font-size:25px}.email-category-card em{margin-top:3px;color:#95a1b2;font-size:8px;font-style:normal}.email-category-card.purple .category-icon{background:#f0ddff;color:#a719d5}.email-category-card.purple strong{color:#a719d5}.email-category-card.red .category-icon{background:#ffe2e6;color:#d9233d}.email-category-card.red strong{color:#d9233d}.email-category-card.blue .category-icon{background:#dceeff;color:#0877ef}.email-category-card.blue strong{color:#0877ef}.email-category-card.green .category-icon{background:#daf5e8;color:#087853}.email-category-card.green strong{color:#087853}.email-category-card.yellow .category-icon{background:#fff0bd;color:#d28b00}.email-category-card.yellow strong{color:#d28b00}.email-table-heading{padding:18px 20px;display:flex;align-items:center;gap:12px}.email-table-heading>div{margin-right:auto}.email-table-heading h2{margin:0;font-size:17px}.email-table-heading p{margin:4px 0 0;color:#8695a9;font-size:10px}.email-table-heading .search-box{width:310px}.email-subject{font-weight:600}.email-type{display:inline-block;padding:6px 10px;border-radius:999px;font-size:8px;font-weight:800;white-space:nowrap}.email-type.check_document{background:#efddff;color:#9720bd}.email-type.spam{background:#ffe1e5;color:#d21e38}.email-type.new_shipping_instruction{background:#dceeff;color:#086cda}.email-type.invoice_question{background:#d9f4e6;color:#087550}.email-type.operational_update{background:#fff0c7;color:#a86a00}.view-button.neutral{border-color:#aab8c9;color:#526982}.view-button.neutral:hover{background:#526982;color:#fff}@media(max-width:1200px){.email-category-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:760px){.dashboard-page{padding:20px 14px}.email-category-grid{grid-template-columns:1fr 1fr}.email-table-heading{flex-wrap:wrap}.email-table-heading>div{width:100%}.email-table-heading .search-box{width:100%}.dashboard-heading p{font-size:12px}}@media(max-width:430px){.email-category-grid{grid-template-columns:1fr}}`}</style>
             <style>{`.email-category-grid{grid-template-columns:repeat(5,minmax(180px,1fr));gap:16px}.email-category-card{min-height:168px;padding:21px 18px;align-items:flex-start;border-radius:16px}.category-icon{width:56px;height:56px;border-radius:16px;font-size:23px}.category-content{display:flex;min-height:124px;flex:1;flex-direction:column}.email-category-card small{min-height:auto;margin-bottom:5px;color:#425a79;font-size:12px;font-weight:800;line-height:1.3}.email-category-card strong{font-size:32px;line-height:1.1}.email-category-card em{margin-top:7px;color:#74869d;font-size:9px;line-height:1.4}.email-category-card .category-content b{margin-top:auto;padding-top:8px;color:#536b88;font-size:9px}.email-category-card.selected .category-content b{color:#086bd9}.email-category-card.selected{transform:translateY(-3px)}@media(max-width:1300px){.email-category-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:850px){.email-category-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:500px){.email-category-grid{grid-template-columns:1fr}.email-category-card{min-height:145px}}`}</style>
+            <style>{`.mismatch-details-card{border-color:#ffc4cb;background:#fff5f6;color:#92253a}.mismatch-details-card h3{color:#92253a;font-size:19px}.mismatch-summary{display:block;margin-bottom:14px;font-size:16px}.mismatch-detail-row{padding:11px 0;border-top:1px solid #f5ccd3}.mismatch-detail-row h4{margin:0 0 7px;color:#92253a;font-size:16px}.mismatch-detail-row p{margin:5px 0;color:#7f4050;font-size:14px}.mismatch-detail-row p strong{color:#8f142f;font-size:15px}`}</style>
         </div>
     );
 }

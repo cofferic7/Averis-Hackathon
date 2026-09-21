@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getResults } from "@/lib/api";
 
 function Icon({
   type,
@@ -49,6 +51,23 @@ function Icon({
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [pendingCount, setPendingCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    getResults()
+      .then((results) => {
+        const count = Object.values(results).filter(
+          (item: any) =>
+            item.status === "MISMATCH" ||
+            item.status === "NEEDS_REVIEW"
+        ).length;
+
+        setPendingCount(count);
+      })
+      .catch((error) => {
+        console.error("Could not load review count:", error);
+      });
+  }, []);
 
   const dashboardActive = pathname === "/";
   const reviewQueueActive = pathname === "/reviewqueue";
@@ -56,7 +75,6 @@ export default function Navbar() {
 
   return (
     <aside className="fixed left-0 top-0 flex h-screen w-[230px] flex-col border-r border-[#EEE9E3] bg-[#FFE4D1] px-[18px] py-[25px] text-[#6B625B] shadow-[8px_0_30px_rgba(120,80,40,0.06)]">
-
       {/* Logo */}
       <div className="flex items-center gap-3 px-2 pb-[34px]">
         <div className="grid h-[38px] w-[38px] place-items-center rounded-[11px] bg-[#EA580C] font-extrabold text-white shadow-[0_8px_20px_rgba(234,88,12,0.20)]">
@@ -76,15 +94,13 @@ export default function Navbar() {
 
       {/* Navigation */}
       <nav className="grid gap-2">
-
         {/* Dashboard */}
         <Link
           href="/"
-          className={`group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm font-medium transition-all duration-200 ${
-            dashboardActive
+          className={`group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm font-medium transition-all duration-200 ${dashboardActive
               ? "border border-[#FED7AA] bg-[#FFF1E8] text-[#C2410C] shadow-[0_4px_12px_rgba(234,88,12,0.06)]"
               : "text-[#6B625B] hover:-translate-y-[1px] hover:bg-[#FFF5EF] hover:text-[#C2410C] hover:shadow-[0_6px_16px_rgba(234,88,12,0.10)]"
-          }`}
+            }`}
         >
           <Icon type="home" />
           <span>Dashboard</span>
@@ -93,35 +109,32 @@ export default function Navbar() {
         {/* Review Queue */}
         <Link
           href="/reviewqueue"
-          className={`group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm transition-all duration-200 ${
-            reviewQueueActive
+          className={`group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm transition-all duration-200 ${reviewQueueActive
               ? "border border-[#FED7AA] bg-[#FFF1E8] font-medium text-[#C2410C] shadow-[0_4px_12px_rgba(234,88,12,0.06)]"
               : "text-[#6B625B] hover:translate-x-[2px] hover:bg-[#FFF5EF] hover:text-[#C2410C]"
-          }`}
+            }`}
         >
           <Icon type="queue" />
 
           <span>Review Queue</span>
 
           <b
-            className={`ml-auto grid h-[23px] min-w-[23px] place-items-center rounded-full px-[6px] text-[11px] font-semibold transition-colors duration-200 ${
-              reviewQueueActive
+            className={`ml-auto grid h-[23px] min-w-[23px] place-items-center rounded-full px-[6px] text-[11px] font-semibold transition-colors duration-200 ${reviewQueueActive
                 ? "bg-[#EA580C] text-white"
                 : "bg-[#FDE8D7] text-[#C2410C] group-hover:bg-[#EA580C] group-hover:text-white"
-            }`}
+              }`}
           >
-            12
+            {pendingCount ?? "…"}
           </b>
         </Link>
 
         {/* Resolved Cases */}
         <Link
           href="/resolved"
-          className={`group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm transition-all duration-200 ${
-            resolvedActive
+          className={`group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm transition-all duration-200 ${resolvedActive
               ? "border border-[#FED7AA] bg-[#FFF1E8] font-medium text-[#C2410C] shadow-[0_4px_12px_rgba(234,88,12,0.06)]"
               : "text-[#6B625B] hover:translate-x-[2px] hover:bg-[#FFF5EF] hover:text-[#C2410C]"
-          }`}
+            }`}
         >
           <Icon type="check" />
           <span>Resolved Cases</span>
@@ -130,7 +143,6 @@ export default function Navbar() {
 
       {/* Help box */}
       <div className="mt-auto rounded-[14px] border border-[#F3DED0] bg-[#FFF8F3] p-4">
-
         <div className="mb-[10px] grid h-[27px] w-[27px] place-items-center rounded-lg bg-[#EA580C] font-extrabold text-white">
           ?
         </div>
