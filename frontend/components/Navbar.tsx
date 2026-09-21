@@ -48,20 +48,20 @@ function Icon({
 
 export default function Navbar() {
   return (
-    <aside className="fixed left-0 top-0 flex h-screen w-[230px] flex-col bg-gradient-to-b from-[#071c3d] via-[#0b3564] to-[#0c4a79] px-[18px] py-[25px] text-blue-100 shadow-[8px_0_30px_rgba(14,44,84,0.12)]">
+    <aside className="fixed left-0 top-0 flex h-screen w-[230px] flex-col border-r border-[#EEE9E3] bg-[#FFE4D1] px-[18px] py-[25px] text-[#6B625B] shadow-[8px_0_30px_rgba(120,80,40,0.06)]">
 
       {/* Logo */}
       <div className="flex items-center gap-3 px-2 pb-[34px]">
-        <div className="grid h-[38px] w-[38px] place-items-center rounded-[11px] bg-gradient-to-br from-[#2d8cff] to-[#075ddb] font-extrabold text-white shadow-[0_8px_20px_rgba(0,105,255,0.35)]">
+        <div className="grid h-[38px] w-[38px] place-items-center rounded-[11px] bg-[#EA580C] font-extrabold text-white shadow-[0_8px_20px_rgba(234,88,12,0.20)]">
           S
         </div>
 
         <div>
-          <strong className="block text-[17px] text-white">
+          <strong className="block text-[17px] text-[#292524]">
             ShipOps
           </strong>
 
-          <span className="mt-[3px] block text-[11px] text-[#93afd0]">
+          <span className="mt-[3px] block text-[11px] text-[#9A8F86]">
             Document Control
           </span>
         </div>
@@ -69,29 +69,34 @@ export default function Navbar() {
 
       {/* Navigation */}
       <nav className="grid gap-2">
+
+        {/* Dashboard */}
         <Link
           href="/"
-          className="flex h-12 items-center gap-[13px] rounded-[10px] bg-gradient-to-r from-[#0964ce] to-[#217ce0] px-[13px] text-sm text-white shadow-[0_9px_22px_rgba(0,73,174,0.35)]"
+          className="group flex h-12 items-center gap-[13px] rounded-[10px] border border-[#FED7AA] bg-[#FFF1E8] px-[13px] text-sm font-medium text-[#C2410C] shadow-[0_4px_12px_rgba(234,88,12,0.06)] transition-all duration-200 hover:-translate-y-[1px] hover:shadow-[0_6px_16px_rgba(234,88,12,0.10)]"
         >
           <Icon type="home" />
           <span>Dashboard</span>
         </Link>
 
+        {/* Review Queue */}
         <Link
           href="/reports"
-          className="group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm text-[#bcd0e8] transition hover:translate-x-[2px] hover:bg-white/[0.07] hover:text-white"
+          className="group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm text-[#6B625B] transition-all duration-200 hover:translate-x-[2px] hover:bg-[#FFF5EF] hover:text-[#C2410C]"
         >
           <Icon type="queue" />
+
           <span>Review Queue</span>
 
-          <b className="ml-auto grid min-w-[23px] h-[23px] place-items-center rounded-full bg-white/[0.18] px-[6px] text-[11px]">
+          <b className="ml-auto grid h-[23px] min-w-[23px] place-items-center rounded-full bg-[#FDE8D7] px-[6px] text-[11px] font-semibold text-[#C2410C] transition-colors duration-200 group-hover:bg-[#EA580C] group-hover:text-white">
             12
           </b>
         </Link>
 
+        {/* Resolved Cases */}
         <Link
           href="/resolved"
-          className="flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm text-[#bcd0e8] transition hover:translate-x-[2px] hover:bg-white/[0.07] hover:text-white"
+          className="group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm text-[#6B625B] transition-all duration-200 hover:translate-x-[2px] hover:bg-[#FFF5EF] hover:text-[#C2410C]"
         >
           <Icon type="check" />
           <span>Resolved Cases</span>
@@ -99,26 +104,27 @@ export default function Navbar() {
       </nav>
 
       {/* Help box */}
-      <div className="mt-auto rounded-[14px] border border-white/[0.14] bg-white/[0.07] p-4">
-        <div className="mb-[10px] grid h-[27px] w-[27px] place-items-center rounded-lg bg-white font-extrabold text-[#1267c9]">
+      <div className="mt-auto rounded-[14px] border border-[#F3DED0] bg-[#FFF8F3] p-4">
+
+        <div className="mb-[10px] grid h-[27px] w-[27px] place-items-center rounded-lg bg-[#EA580C] font-extrabold text-white">
           ?
         </div>
 
-        <strong className="text-[13px] text-white">
+        <strong className="text-[13px] text-[#292524]">
           Need help?
         </strong>
 
-        <p className="my-[6px] mb-[13px] text-[11px] leading-[1.5] text-[#a9c2de]">
+        <p className="my-[6px] mb-[13px] text-[11px] leading-[1.5] text-[#8A7F77]">
           View the review guide and field rules.
         </p>
 
-        <button className="w-full rounded-[7px] border-0 bg-white/[0.13] py-2 text-white font-bold">
+        <button className="w-full rounded-[7px] border border-[#F3DED0] bg-white py-2 font-bold text-[#C2410C] transition-all duration-200 hover:border-[#FDBA74] hover:bg-[#FFF1E8]">
           Open guide
         </button>
       </div>
 
       {/* Version */}
-      <p className="mt-[14px] ml-[3px] text-[10px] text-[#87a9cb]">
+      <p className="ml-[3px] mt-[14px] text-[10px] text-[#A69B92]">
         ShipOps v1.0 · Hackathon demo
       </p>
     </aside>
