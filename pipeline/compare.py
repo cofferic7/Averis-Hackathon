@@ -1,6 +1,7 @@
 import re
 from typing import Any, Dict, List, Optional
 
+PLACEHOLDER_RUN = re.compile(r"_{2,}")
 
 # ============================================================
 # CONSTANTS
@@ -29,28 +30,19 @@ ALLOWED_REVIEW_REASONS = {
 # MISSING VALUE CHECK
 # ============================================================
 
-def is_missing(value: Any) -> bool:
-    """
-    Check whether a value should be treated as missing.
-    """
+BARE_UNIT_TOKENS = {"mt", "mts", "kg", "kgs", "lbs", "cbm"}
 
+def is_missing(value: Any) -> bool:
     if value is None:
         return True
-
     if isinstance(value, str):
         cleaned = value.strip().casefold()
-
-        return cleaned in {
-            "",
-            "missing",
-            "n/a",
-            "na",
-            "none",
-            "null",
-            "unknown",
-            "not available",
-        }
-
+        if cleaned in {"", "missing", "n/a", "na", "none", "null", "unknown", "not available", "???", "tba"}:
+            return True
+        if PLACEHOLDER_RUN.search(cleaned):
+            return True
+        if cleaned in BARE_UNIT_TOKENS:
+            return True
     return False
 
 
@@ -191,6 +183,7 @@ def compare_shipment_data(
     Compare SI and BL data produced by the
     attachment extraction stage.
     """
+    escalation_reason = extraction_payload.get("escalation_reason")
 
     # --------------------------------------------------------
     # Get SI and BL directly from extraction output
@@ -199,6 +192,9 @@ def compare_shipment_data(
     si_raw = extraction_payload.get("SI")
     bl_raw = extraction_payload.get("BL")
 
+    if escalation_reason in {"unreadable", "wrong_doc_type"}:
+        return make_result(status="NEEDS_REVIEW", review_reason=escalation_reason,
+                            message=f"Escalated: {escalation_reason}")
     # --------------------------------------------------------
     # Check whether required documents exist
     # --------------------------------------------------------
@@ -293,12 +289,9 @@ def compare_shipment_data(
         return make_result(
             status="NEEDS_REVIEW",
             review_reason="missing_value",
-            defect_fields=defect_fields,
+            defect_fields=[],  # NEEDS_REVIEW rows must have empty defect_fields per spec
             side_by_side=side_by_side,
-            message=(
-                "Missing or unusable value in: "
-                + ", ".join(missing_fields)
-            ),
+            message="Missing or unusable value in: " + ", ".join(missing_fields),
         )
 
     # --------------------------------------------------------
