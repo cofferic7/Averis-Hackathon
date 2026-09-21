@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import Topbar from "@/components/Topbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,9 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ShipOps | Shipping Document Review",
-  description:
-    "Review Shipping Instructions and Bills of Lading for missing information and mismatches.",
+  title: "ShipOps",
+  description: "Shipping Document Verification",
 };
 
 export default function RootLayout({
@@ -28,7 +29,15 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
-      <body>{children}</body>
+      <body className="min-h-full">
+        <Navbar />
+
+        <div className="ml-[230px]">
+          <Topbar />
+
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
