@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useEffect } from "react";
 import { getResults } from "@/lib/api";
+import { useSearchParams } from "next/navigation";
 
 type ReviewStatus = "MISMATCH" | "NEEDS_REVIEW";
 
@@ -703,7 +704,11 @@ const emailTypeLabels: Record<EmailType, string> = {
     OPERATIONAL_UPDATE: "Operational Update",
 };
 
-function Dashboard({ openReviewQueue }: { openReviewQueue: () => void }) {
+function Dashboard({
+    openReviewQueue,
+}: {
+    openReviewQueue: (emailId: string) => void;
+}) {
     const [category, setCategory] = useState<EmailType | "ALL">("ALL");
     const [emailSearch, setEmailSearch] = useState("");
     const emails = classifiedEmails.filter((email) => {
@@ -722,7 +727,7 @@ function Dashboard({ openReviewQueue }: { openReviewQueue: () => void }) {
             </section>
             <section className="queue-panel email-panel">
                 <div className="email-table-heading"><div><h2>{category === "ALL" ? "All classified emails" : emailTypeLabels[category]}</h2><p>{category === "ALL" ? "Showing emails from every classification category" : `Only showing emails classified as ${emailTypeLabels[category]}`}</p></div><label className="search-box"><Icon name="search" /><input value={emailSearch} onChange={(e) => setEmailSearch(e.target.value)} placeholder="Search email, sender or subject" /></label><span className="result-count">{emails.length} emails</span></div>
-                <div className="table-wrap"><table><thead><tr><th>Email ID</th><th>Sender</th><th>Subject</th><th>Received</th><th>Email Type</th><th>Action</th></tr></thead><tbody>{emails.map((email) => <tr key={email.id}><td><strong>{email.id}</strong></td><td>{email.sender}</td><td><strong className="email-subject">{email.subject}</strong></td><td>{email.received}</td><td><span className={`email-type ${email.type.toLowerCase()}`}>{emailTypeLabels[email.type]}</span></td><td>{email.type === "CHECK_DOCUMENT" ? <button className="view-button" onClick={openReviewQueue}>Open Review</button> : <button className="view-button neutral">View Email</button>}</td></tr>)}</tbody></table>{!emails.length && <div className="empty"><strong>No emails found</strong><p>Try another category or search term.</p></div>}</div>
+                <div className="table-wrap"><table><thead><tr><th>Email ID</th><th>Sender</th><th>Subject</th><th>Received</th><th>Email Type</th><th>Action</th></tr></thead><tbody>{emails.map((email) => <tr key={email.id}><td><strong>{email.id}</strong></td><td>{email.sender}</td><td><strong className="email-subject">{email.subject}</strong></td><td>{email.received}</td><td><span className={`email-type ${email.type.toLowerCase()}`}>{emailTypeLabels[email.type]}</span></td><td>{email.type === "CHECK_DOCUMENT" ? <button className="view-button" onClick={() => openReviewQueue(email.id)}>Open Review</button> : <button className="view-button neutral">View Email</button>}</td></tr>)}</tbody></table>{!emails.length && <div className="empty"><strong>No emails found</strong><p>Try another category or search term.</p></div>}</div>
                 <footer className="panel-footer"><span>Showing {emails.length} classified emails</span><span>AI classification demo</span></footer>
             </section>
         </section>
@@ -760,6 +765,9 @@ function ResolvedCases() {
 }
 
 export default function ReviewQueue() {
+    const searchParams = useSearchParams();
+    const emailFromUrl = searchParams.get("email");
+
     const [query, setQuery] = useState("");
     const [status, setStatus] =
         useState<"ALL" | ReviewStatus>("ALL");
@@ -859,6 +867,19 @@ export default function ReviewQueue() {
                 };
             });
     }, [data]);
+    
+    useEffect(() => {
+        if (!emailFromUrl || reviewCases.length === 0) return;
+
+        const matchingCase = reviewCases.find(
+            (item) => item.emailId === emailFromUrl
+        );
+
+        if (matchingCase) {
+            setSelectedCase(matchingCase);
+            setCurrentPage("queue");
+        }
+    }, [emailFromUrl, reviewCases]);
 
     const filteredCases = useMemo(() => {
         const search = query.trim().toLowerCase();
@@ -881,7 +902,12 @@ export default function ReviewQueue() {
 
             <main>
 
-                {currentPage === "dashboard" ? <Dashboard openReviewQueue={() => setCurrentPage("queue")} /> : currentPage === "resolved" ? <ResolvedCases /> : selectedCase ? <CaseDetail item={selectedCase} onBack={() => setSelectedCase(null)} /> : <section className="content">
+                {currentPage === "dashboard" ? <Dashboard openReviewQueue={(emailId) => {
+                    const matchingCase = reviewCases.find((item) => item.emailId === emailId);
+                    if (matchingCase) {setSelectedCase(matchingCase);
+                        setCurrentPage("queue");
+        }
+    }}/> : currentPage === "resolved" ? <ResolvedCases /> : selectedCase ? <CaseDetail item={selectedCase} onBack={() => setSelectedCase(null)} /> : <section className="content">
                     <div className="page-heading">
                         <div>
                             <span className="eyebrow">DOCUMENT VERIFICATION</span>

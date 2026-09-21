@@ -86,23 +86,27 @@ export default function Dashboard({
         SPAM: "SPAM",
     };
 
-    const emails: Email[] = Object.entries(data).map(
-        ([id, item]: [string, any]) => ({
+    const emails: Email[] = Object.entries(data)
+        .map(([id, item]: [string, any]) => ({
             id,
             sender: "Shipping Operations",
             subject: item.subject || "Shipping Email",
             received: "Recently",
             type: categoryMap[item.category] || "OPERATIONAL_UPDATE",
-            status:
-                item.status === "NEEDS_REVIEW"
-                    ? "NEEDS_REVIEW"
-                    : "RESOLVED",
+            status: item.status === "NEEDS_REVIEW"
+                ? ("NEEDS_REVIEW" as const)
+                : ("RESOLVED" as const),
             summary:
                 item.status === "NEEDS_REVIEW"
                     ? item.review_reason || "Requires attention"
                     : "No issues detected",
-        })
-    );
+        }))
+        .sort((a, b) => {
+            const numberA = Number(a.id.replace("email_", ""));
+            const numberB = Number(b.id.replace("email_", ""));
+
+            return numberB - numberA;
+        });
 
     const categories: Category[] = [
         {
@@ -235,7 +239,7 @@ export default function Dashboard({
                         items-center
                         gap-3
                         mb-5
-                        text-gray-600
+                        text-[#EA580C]
                         hover:text-[#EA580C]
                         transition-all
                         duration-200
@@ -648,8 +652,7 @@ export default function Dashboard({
                                 <div className="shrink-0">
 
                                     {email.type === "CHECK_DOCUMENT" &&
-                                    email.status ===
-                                        "NEEDS_REVIEW" ? (
+                                    email.status === "NEEDS_REVIEW" && (
 
                                         <Link
                                             href={`/reviewqueue?email=${encodeURIComponent(email.id)}`}
@@ -670,28 +673,6 @@ export default function Dashboard({
                                         >
                                             Open Review Queue →
                                         </Link>
-
-                                    ) : (
-
-                                        <button
-                                            className="
-                                                px-4
-                                                py-2.5
-                                                border
-                                                border-gray-300
-                                                text-gray-600
-                                                rounded-lg
-                                                text-sm
-                                                font-semibold
-                                                transition-all
-                                                duration-200
-                                                hover:border-[#EA580C]
-                                                hover:text-[#EA580C]
-                                                hover:bg-orange-50
-                                            "
-                                        >
-                                            View →
-                                        </button>
 
                                     )}
 
