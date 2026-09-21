@@ -28,7 +28,6 @@ type Email = {
 type Category = {
     type: EmailType;
     title: string;
-    description: string;
     count: number;
     icon: string;
 };
@@ -108,8 +107,7 @@ export default function Dashboard({
     const categories: Category[] = [
         {
             type: "CHECK_DOCUMENT",
-            title: "Document Check",
-            description: "Verify shipping documents and identify discrepancies",
+            title: "Document Check Requests",
             count: emails.filter(
                 (email) => email.type === "CHECK_DOCUMENT"
             ).length,
@@ -117,8 +115,7 @@ export default function Dashboard({
         },
         {
             type: "NEW_SHIPPING_INSTRUCTION",
-            title: "Shipping Instructions",
-            description: "Review new and updated shipping instructions",
+            title: "Shipping Instructions Preparation",
             count: emails.filter(
                 (email) => email.type === "NEW_SHIPPING_INSTRUCTION"
             ).length,
@@ -126,8 +123,7 @@ export default function Dashboard({
         },
         {
             type: "INVOICE_QUESTION",
-            title: "Invoice Questions",
-            description: "Review questions and enquiries about invoices",
+            title: "Invoice Questions Enquiry",
             count: emails.filter(
                 (email) => email.type === "INVOICE_QUESTION"
             ).length,
@@ -136,7 +132,6 @@ export default function Dashboard({
         {
             type: "OPERATIONAL_UPDATE",
             title: "Operational Updates",
-            description: "Monitor shipment and operational communications",
             count: emails.filter(
                 (email) => email.type === "OPERATIONAL_UPDATE"
             ).length,
@@ -145,7 +140,6 @@ export default function Dashboard({
         {
             type: "SPAM",
             title: "Spam",
-            description: "Automatically filtered unwanted emails",
             count: emails.filter(
                 (email) => email.type === "SPAM"
             ).length,
@@ -294,10 +288,6 @@ export default function Dashboard({
                             <h1 className="text-2xl font-bold text-[#1F2937]">
                                 {currentCategory.title}
                             </h1>
-
-                            <p className="text-sm text-gray-500 mt-1">
-                                {currentCategory.description}
-                            </p>
 
                         </div>
 
@@ -662,7 +652,7 @@ export default function Dashboard({
                                         "NEEDS_REVIEW" ? (
 
                                         <Link
-                                            href="/reviewqueue"
+                                            href={`/reviewqueue?email=${encodeURIComponent(email.id)}`}
                                             className="
                                                 bg-[#EA580C]
                                                 hover:bg-[#C2410C]
@@ -818,24 +808,6 @@ export default function Dashboard({
                     </p>
                 </div>
 
-
-                <div className="
-                    bg-white
-                    border
-                    border-gray-200
-                    rounded-xl
-                    px-5
-                    py-4
-                    shadow-sm
-                ">
-                    <p className="text-xs font-medium text-gray-500">
-                        Need attention
-                    </p>
-
-                    <p className="text-2xl font-bold text-[#EA580C] mt-1">
-                        {needsAttention}
-                    </p>
-                </div>
 
 
                 <div className="
@@ -1016,7 +988,7 @@ export default function Dashboard({
 
                             <h3
                                 className="
-                                    text-base
+                                    text-lg
                                     font-bold
                                     text-[#1F2937]
                                     transition-colors
@@ -1036,7 +1008,6 @@ export default function Dashboard({
                                     line-clamp-2
                                 "
                             >
-                                {category.description}
                             </p>
 
                         </div>
@@ -1072,169 +1043,6 @@ export default function Dashboard({
                     </button>
 
                 ))}
-
-            </div>
-
-
-            {/* =================================================
-                REVIEW OVERVIEW
-            ================================================= */}
-
-            <div className="mt-7">
-
-                <div className="flex items-center justify-between mb-3">
-
-                    <div>
-
-                        <h2 className="text-lg font-bold text-gray-900">
-                            Review Overview
-                        </h2>
-
-                        <p className="text-sm text-gray-500 mt-1">
-                            Shipping documents requiring staff attention
-                        </p>
-
-                    </div>
-
-
-                    <button
-                        onClick={openReviewQueue}
-                        className="
-                            bg-[#EA580C]
-                            hover:bg-[#C2410C]
-                            text-white
-                            font-semibold
-                            px-4
-                            py-2.5
-                            rounded-lg
-                            text-sm
-                            transition-all
-                            duration-200
-                            hover:-translate-y-0.5
-                            hover:shadow-md
-                        "
-                    >
-                        Open Review Queue →
-                    </button>
-
-                </div>
-
-
-                {/* REVIEW TABLE */}
-
-                <div
-                    className="
-                        bg-white
-                        border
-                        border-gray-200
-                        rounded-xl
-                        overflow-hidden
-                        shadow-sm
-                    "
-                >
-
-                    <div
-                        className="
-                            grid
-                            grid-cols-4
-                            px-5
-                            py-3
-                            bg-gray-50
-                            border-b
-                            border-gray-200
-                            text-[11px]
-                            font-bold
-                            uppercase
-                            tracking-wide
-                            text-gray-500
-                        "
-                    >
-                        <span>Email</span>
-                        <span>Issue</span>
-                        <span>Priority</span>
-                        <span>Received</span>
-                    </div>
-
-
-                    {[
-                        {
-                            id: "email_004",
-                            issue: "Container count mismatch",
-                            priority: "High",
-                            received: "5 min ago",
-                        },
-                        {
-                            id: "email_017",
-                            issue: "Gross weight missing",
-                            priority: "High",
-                            received: "18 min ago",
-                        },
-                        {
-                            id: "email_026",
-                            issue: "BL attachment missing",
-                            priority: "Medium",
-                            received: "34 min ago",
-                        },
-                    ].map((item) => (
-
-                        <div
-                            key={item.id}
-                            className="
-                                grid
-                                grid-cols-4
-                                px-5
-                                py-4
-                                border-b
-                                border-gray-100
-                                last:border-0
-                                items-center
-
-                                transition-colors
-                                duration-150
-
-                                hover:bg-orange-50/50
-                            "
-                        >
-
-                            <span className="font-semibold text-sm text-gray-800">
-                                {item.id}
-                            </span>
-
-                            <span className="text-sm text-gray-700">
-                                {item.issue}
-                            </span>
-
-                            <span>
-
-                                <span
-                                    className={`
-                                        inline-flex
-                                        px-2.5
-                                        py-1
-                                        rounded-full
-                                        text-[11px]
-                                        font-bold
-                                        ${
-                                            item.priority === "High"
-                                                ? "bg-red-100 text-red-700"
-                                                : "bg-orange-100 text-orange-700"
-                                        }
-                                    `}
-                                >
-                                    {item.priority}
-                                </span>
-
-                            </span>
-
-                            <span className="text-sm text-gray-500">
-                                {item.received}
-                            </span>
-
-                        </div>
-
-                    ))}
-
-                </div>
 
             </div>
 
