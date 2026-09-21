@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { getResults } from "@/lib/api";
 
 type EmailType =
     | "CHECK_DOCUMENT"
@@ -37,140 +38,11 @@ type Category = {
    DEMO EMAIL DATA
 ========================================================= */
 
-const emails: Email[] = [
-    {
-        id: "email_004",
-        sender: "operations@shipping.com",
-        subject: "Draft BL Verification",
-        received: "5 min ago",
-        type: "CHECK_DOCUMENT",
-        status: "NEEDS_REVIEW",
-        summary: "Container count mismatch",
-        si: "3 containers",
-        bl: "4 containers",
-    },
-    {
-        id: "email_017",
-        sender: "shipping@company.com",
-        subject: "BL Verification Required",
-        received: "18 min ago",
-        type: "CHECK_DOCUMENT",
-        status: "NEEDS_REVIEW",
-        summary: "Gross weight missing",
-        si: "22,000 kg",
-        bl: "Missing",
-    },
-    {
-        id: "email_026",
-        sender: "operations@shipping.com",
-        subject: "Shipping Document",
-        received: "34 min ago",
-        type: "CHECK_DOCUMENT",
-        status: "NEEDS_REVIEW",
-        summary: "BL attachment missing",
-        si: "Available",
-        bl: "Missing",
-    },
-    {
-        id: "email_031",
-        sender: "documentation@shipping.com",
-        subject: "Draft BL Check",
-        received: "1 hr ago",
-        type: "CHECK_DOCUMENT",
-        status: "RESOLVED",
-        summary: "Port of discharge mismatch",
-        si: "Singapore",
-        bl: "Port Klang",
-    },
-    {
-        id: "email_002",
-        sender: "customer@company.com",
-        subject: "New Shipping Instruction",
-        received: "12 min ago",
-        type: "NEW_SHIPPING_INSTRUCTION",
-        status: "RESOLVED",
-        summary: "New shipping instruction received",
-    },
-    {
-        id: "email_008",
-        sender: "customer@company.com",
-        subject: "Updated Shipping Instruction",
-        received: "42 min ago",
-        type: "NEW_SHIPPING_INSTRUCTION",
-        status: "NEEDS_REVIEW",
-        summary: "Shipping instruction requires attention",
-    },
-    {
-        id: "email_011",
-        sender: "accounts@company.com",
-        subject: "Invoice Question",
-        received: "1 hr ago",
-        type: "INVOICE_QUESTION",
-        status: "RESOLVED",
-        summary: "Question regarding invoice amount",
-    },
-    {
-        id: "email_014",
-        sender: "operations@company.com",
-        subject: "Operational Update",
-        received: "2 hrs ago",
-        type: "OPERATIONAL_UPDATE",
-        status: "RESOLVED",
-        summary: "Shipment status update",
-    },
-    {
-        id: "email_019",
-        sender: "unknown@randommail.com",
-        subject: "Congratulations! You Won",
-        received: "3 hrs ago",
-        type: "SPAM",
-        status: "RESOLVED",
-        summary: "Automatically identified as spam",
-    },
-];
 
+/* ========
 
-/* =========================================================
-   CATEGORY DATA
-========================================================= */
+==========*/
 
-const categories: Category[] = [
-    {
-        type: "CHECK_DOCUMENT",
-        title: "Document Check",
-        description: "Verify shipping documents and identify discrepancies",
-        count: 12,
-        icon: "▣",
-    },
-    {
-        type: "NEW_SHIPPING_INSTRUCTION",
-        title: "Shipping Instructions",
-        description: "Review new and updated shipping instructions",
-        count: 18,
-        icon: "≡",
-    },
-    {
-        type: "INVOICE_QUESTION",
-        title: "Invoice Questions",
-        description: "Review questions and enquiries about invoices",
-        count: 3,
-        icon: "$",
-    },
-    {
-        type: "OPERATIONAL_UPDATE",
-        title: "Operational Updates",
-        description: "Monitor shipment and operational communications",
-        count: 7,
-        icon: "↻",
-    },
-    {
-        type: "SPAM",
-        title: "Spam",
-        description: "Automatically filtered unwanted emails",
-        count: 3,
-        icon: "⊘",
-    },
-];
 
 
 /* =========================================================
@@ -190,9 +62,109 @@ export default function Dashboard({
 
     const [search, setSearch] = useState("");
 
-    const currentCategory = categories.find(
-        (category) => category.type === selectedCategory
+
+    const [data, setData] = useState<Record<string, any>>({});
+
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getResults()
+            .then((result) => {
+                setData(result);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error(error);
+                setLoading(false);
+            });
+    }, []);
+
+    const categoryMap: Record<string, EmailType> = {
+        BL_COMPARISON: "CHECK_DOCUMENT",
+        SI_REQUEST: "NEW_SHIPPING_INSTRUCTION",
+        INVOICE_QUERY: "INVOICE_QUESTION",
+        GENERAL: "OPERATIONAL_UPDATE",
+        SPAM: "SPAM",
+    };
+
+    const emails: Email[] = Object.entries(data).map(
+        ([id, item]: [string, any]) => ({
+            id,
+            sender: "Shipping Operations",
+            subject: item.subject || "Shipping Email",
+            received: "Recently",
+            type: categoryMap[item.category] || "OPERATIONAL_UPDATE",
+            status:
+                item.status === "NEEDS_REVIEW"
+                    ? "NEEDS_REVIEW"
+                    : "RESOLVED",
+            summary:
+                item.status === "NEEDS_REVIEW"
+                    ? item.review_reason || "Requires attention"
+                    : "No issues detected",
+        })
     );
+
+    const categories: Category[] = [
+        {
+            type: "CHECK_DOCUMENT",
+            title: "Document Check",
+            description: "Verify shipping documents and identify discrepancies",
+            count: emails.filter(
+                (email) => email.type === "CHECK_DOCUMENT"
+            ).length,
+            icon: "▣",
+        },
+        {
+            type: "NEW_SHIPPING_INSTRUCTION",
+            title: "Shipping Instructions",
+            description: "Review new and updated shipping instructions",
+            count: emails.filter(
+                (email) => email.type === "NEW_SHIPPING_INSTRUCTION"
+            ).length,
+            icon: "≡",
+        },
+        {
+            type: "INVOICE_QUESTION",
+            title: "Invoice Questions",
+            description: "Review questions and enquiries about invoices",
+            count: emails.filter(
+                (email) => email.type === "INVOICE_QUESTION"
+            ).length,
+            icon: "$",
+        },
+        {
+            type: "OPERATIONAL_UPDATE",
+            title: "Operational Updates",
+            description: "Monitor shipment and operational communications",
+            count: emails.filter(
+                (email) => email.type === "OPERATIONAL_UPDATE"
+            ).length,
+            icon: "↻",
+        },
+        {
+            type: "SPAM",
+            title: "Spam",
+            description: "Automatically filtered unwanted emails",
+            count: emails.filter(
+                (email) => email.type === "SPAM"
+            ).length,
+            icon: "⊘",
+        },
+    ];
+
+    const currentCategory = categories.find((category) => category.type === selectedCategory);
+
+
+    const totalEmails = emails.length;
+
+    const needsAttention = emails.filter(
+        (email) => email.status === "NEEDS_REVIEW"
+    ).length;
+
+    const resolved = emails.filter(
+        (email) => email.status === "RESOLVED"
+    ).length;
 
 
     /* =====================================================
@@ -842,7 +814,7 @@ export default function Dashboard({
                     </p>
 
                     <p className="text-2xl font-bold text-gray-900 mt-1">
-                        43
+                        {totalEmails}
                     </p>
                 </div>
 
@@ -861,7 +833,7 @@ export default function Dashboard({
                     </p>
 
                     <p className="text-2xl font-bold text-[#EA580C] mt-1">
-                        12
+                        {needsAttention}
                     </p>
                 </div>
 
@@ -880,7 +852,7 @@ export default function Dashboard({
                     </p>
 
                     <p className="text-2xl font-bold text-green-600 mt-1">
-                        31
+                        {resolved}
                     </p>
                 </div>
 
@@ -899,7 +871,7 @@ export default function Dashboard({
                     </p>
 
                     <p className="text-2xl font-bold text-orange-600 mt-1">
-                        3
+                        {needsAttention}
                     </p>
                 </div>
 

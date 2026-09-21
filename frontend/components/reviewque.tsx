@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect} from "react";
+import { getResults } from "@/lib/api";
 
 type ReviewStatus = "MISMATCH" | "NEEDS_REVIEW";
 
@@ -12,46 +13,9 @@ type ReviewCase = {
     status: ReviewStatus;
     priority: "High" | "Medium";
     received: string;
+    raw: any;
 };
 
-const reviewCases: ReviewCase[] = [
-    {
-        emailId: "email_004",
-        issue: "Container count mismatch",
-        si: "3 containers",
-        bl: "4 containers",
-        status: "MISMATCH",
-        priority: "High",
-        received: "5 min ago",
-    },
-    {
-        emailId: "email_017",
-        issue: "Gross weight missing",
-        si: "22,000 kg",
-        bl: "Missing",
-        status: "NEEDS_REVIEW",
-        priority: "High",
-        received: "18 min ago",
-    },
-    {
-        emailId: "email_026",
-        issue: "BL attachment missing",
-        si: "Available",
-        bl: "Missing",
-        status: "NEEDS_REVIEW",
-        priority: "Medium",
-        received: "34 min ago",
-    },
-    {
-        emailId: "email_031",
-        issue: "Port of discharge mismatch",
-        si: "Singapore",
-        bl: "Port Klang",
-        status: "MISMATCH",
-        priority: "Medium",
-        received: "1 hr ago",
-    },
-];
 
 function Icon({ name }: { name: "home" | "queue" | "check" | "search" | "bell" | "chevron" }) {
     const paths = {
@@ -89,54 +53,622 @@ function StatCard({ label, value, tone, symbol, detail }: {
     );
 }
 
-function CaseDetail({ item, onBack }: { item: ReviewCase; onBack: () => void }) {
+function CaseDetail({
+    item,
+    onBack,
+}: {
+    item: ReviewCase;
+    onBack: () => void;
+}) {
     const isMismatch = item.status === "MISMATCH";
+
+    const si = item.raw?.si || {};
+    const bl = item.raw?.bl || {};
+
     const [choice, setChoice] = useState<"SI" | "BL" | null>(null);
-    const [weight, setWeight] = useState(item.si.replace(/[^0-9,]/g, ""));
-    const [containerCount, setContainerCount] = useState("");
-    const [packageType, setPackageType] = useState("");
+    const [weight, setWeight] = useState(
+        si.gross_weight_kg !== null && si.gross_weight_kg !== undefined
+            ? String(si.gross_weight_kg)
+            : ""
+    );
+    const [containerCount, setContainerCount] = useState(
+        si.container_count !== null && si.container_count !== undefined
+            ? String(si.container_count)
+            : ""
+    );
+    const [portOfLoading, setPortOfLoading] = useState(
+        si.port_of_loading || ""
+    );
+    const [portOfDischarge, setPortOfDischarge] = useState(
+        si.port_of_discharge || ""
+    );
     const [notes, setNotes] = useState("");
     const [saved, setSaved] = useState(false);
 
+    const fieldLabels: Record<string, string> = {
+        shipper: "Shipper",
+        consignee: "Consignee",
+        notify_party: "Notify Party",
+        port_of_loading: "Port of Loading",
+        port_of_discharge: "Port of Discharge",
+        container_count: "Container Count",
+        gross_weight_kg: "Gross Weight",
+    };
+
+    const formatValue = (value: any) => {
+        if (value === null || value === undefined || value === "") {
+            return "Not available";
+        }
+
+        if (typeof value === "number") {
+            return value.toLocaleString();
+        }
+
+        return String(value);
+    };
+
+    const renderDocumentField = (
+        label: string,
+        value: any,
+        isDefect = false
+    ) => (
+        <div>
+            <dt>{label}</dt>
+            <dd className={isDefect ? "value-red" : ""}>
+                {formatValue(value)}
+            </dd>
+        </div>
+    );
+
+    
+
+
     if (isMismatch) {
+        const defectField = item.raw?.defect_fields?.[0];
+        const defectLabel =
+            fieldLabels[defectField] || "Document mismatch";
+
+        const siDefectValue = si?.[defectField];
+        const blDefectValue = bl?.[defectField];
+
         return (
             <section className="detail-page">
-                <button className="back-link" onClick={onBack}>← Review Queue</button>
+                <button className="back-link" onClick={onBack}>
+                    ← Review Queue
+                </button>
+
                 <div className="detail-title-row">
-                    <div><h1>{item.issue}</h1><p>Compare the source documents and confirm the correct container count.</p></div>
-                    <span className="status mismatch">▲ Mismatch</span>
+                    <div>
+                        <h1>{item.issue}</h1>
+                        <p>
+                            Compare the source documents and confirm the
+                            correct information.
+                        </p>
+                    </div>
+
+                    <span className="status mismatch">
+                        ▲ Mismatch
+                    </span>
                 </div>
-                <div className="alert-box"><b>!</b><div><strong>The documents disagree on container count.</strong><p>Shipping Instruction lists 3 containers; Bill of Lading lists 4. Difference: +1 container.</p></div></div>
+
+                <div className="alert-box">
+                    <b>!</b>
+                    <div>
+                        <strong>
+                            The documents disagree on {defectLabel.toLowerCase()}.
+                        </strong>
+
+                        <p>
+                            Shipping Instruction:{" "}
+                            <b>{formatValue(siDefectValue)}</b>
+                            {" · "}
+                            Bill of Lading:{" "}
+                            <b>{formatValue(blDefectValue)}</b>
+                        </p>
+                    </div>
+                </div>
+
                 <div className="document-grid">
                     <article className="document-card">
-                        <div className="doc-heading"><span>▤</span><div><h3>Shipping Instruction</h3><small>SI-7842931</small></div><em>Available</em></div>
-                        <dl><div><dt>Container count</dt><dd className="value-red">3</dd></div><div><dt>Booking reference</dt><dd>BKG-7842931</dd></div><div><dt>Vessel / Voyage</dt><dd>MAERSK LIMA / 418W</dd></div><div><dt>Port of loading</dt><dd>Shanghai, CN</dd></div><div><dt>Port of discharge</dt><dd>Rotterdam, NL</dd></div></dl>
-                        <button className="text-button">↗ View full document</button>
+                        <div className="doc-heading">
+                            <span>▤</span>
+
+                            <div>
+                                <h3>Shipping Instruction</h3>
+                                <small>
+                                    {formatValue(si.document_type)}
+                                </small>
+                            </div>
+
+                            <em>
+                                {Object.values(si).some(
+                                    (value) =>
+                                        value !== null &&
+                                        value !== undefined &&
+                                        value !== ""
+                                )
+                                    ? "Available"
+                                    : "Missing"}
+                            </em>
+                        </div>
+
+                        <dl>
+                            {renderDocumentField(
+                                "Shipper",
+                                si.shipper
+                            )}
+
+                            {renderDocumentField(
+                                "Consignee",
+                                si.consignee
+                            )}
+
+                            {renderDocumentField(
+                                "Notify Party",
+                                si.notify_party
+                            )}
+
+                            {renderDocumentField(
+                                "Port of loading",
+                                si.port_of_loading
+                            )}
+
+                            {renderDocumentField(
+                                "Port of discharge",
+                                si.port_of_discharge
+                            )}
+
+                            {renderDocumentField(
+                                "Container count",
+                                si.container_count,
+                                defectField === "container_count"
+                            )}
+
+                            {renderDocumentField(
+                                "Gross weight (kg)",
+                                si.gross_weight_kg,
+                                defectField === "gross_weight_kg"
+                            )}
+                        </dl>
                     </article>
+
                     <article className="document-card">
-                        <div className="doc-heading"><span>▤</span><div><h3>Bill of Lading</h3><small>BL-RTM-004829</small></div><em>Available</em></div>
-                        <dl><div><dt>Container count</dt><dd className="value-red">4</dd></div><div><dt>Booking reference</dt><dd>BKG-7842931</dd></div><div><dt>Vessel / Voyage</dt><dd>MAERSK LIMA / 418W</dd></div><div><dt>Port of loading</dt><dd>Shanghai, CN</dd></div><div><dt>Port of discharge</dt><dd>Rotterdam, NL</dd></div></dl>
-                        <button className="text-button">↗ View full document</button>
+                        <div className="doc-heading">
+                            <span>▤</span>
+
+                            <div>
+                                <h3>Bill of Lading</h3>
+                                <small>
+                                    {formatValue(bl.document_type)}
+                                </small>
+                            </div>
+
+                            <em>
+                                {Object.values(bl).some(
+                                    (value) =>
+                                        value !== null &&
+                                        value !== undefined &&
+                                        value !== ""
+                                )
+                                    ? "Available"
+                                    : "Missing"}
+                            </em>
+                        </div>
+
+                        <dl>
+                            {renderDocumentField(
+                                "Shipper",
+                                bl.shipper
+                            )}
+
+                            {renderDocumentField(
+                                "Consignee",
+                                bl.consignee
+                            )}
+
+                            {renderDocumentField(
+                                "Notify Party",
+                                bl.notify_party
+                            )}
+
+                            {renderDocumentField(
+                                "Port of loading",
+                                bl.port_of_loading
+                            )}
+
+                            {renderDocumentField(
+                                "Port of discharge",
+                                bl.port_of_discharge
+                            )}
+
+                            {renderDocumentField(
+                                "Container count",
+                                bl.container_count,
+                                defectField === "container_count"
+                            )}
+
+                            {renderDocumentField(
+                                "Gross weight (kg)",
+                                bl.gross_weight_kg,
+                                defectField === "gross_weight_kg"
+                            )}
+                        </dl>
                     </article>
                 </div>
+
                 <div className="resolution-grid">
-                    <article className="info-card"><h3>Shipment details</h3><div className="mini-grid"><span>Email ID<strong>{item.emailId}</strong></span><span>Shipper<strong>Pacific Home Goods Ltd.</strong></span><span>Consignee<strong>Northstar Retail B.V.</strong></span><span>Received<strong>20 Sep 2026 · 08:12</strong></span></div></article>
-                    <article className="resolve-card"><h3>Resolve mismatch</h3><p>Which container count is correct?</p><div className="choice-row"><button className={choice === "SI" ? "selected" : ""} onClick={() => setChoice("SI")}>Confirm 3 (SI)</button><button className={choice === "BL" ? "selected" : ""} onClick={() => setChoice("BL")}>Confirm 4 (BL)</button></div><textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Add an optional review note..." /><div className="form-actions"><button className="secondary" onClick={onBack}>Cancel</button><button className="primary" disabled={!choice} onClick={() => setSaved(true)}>{saved ? "Saved ✓" : "Resolve case"}</button></div></article>
+                    <article className="info-card">
+                        <h3>Shipment details</h3>
+
+                        <div className="mini-grid">
+                            <span>
+                                Email ID
+                                <strong>{item.emailId}</strong>
+                            </span>
+
+                            <span>
+                                Subject
+                                <strong>
+                                    {item.raw?.subject || "Not available"}
+                                </strong>
+                            </span>
+
+                            <span>
+                                Shipper
+                                <strong>
+                                    {formatValue(si.shipper)}
+                                </strong>
+                            </span>
+
+                            <span>
+                                Consignee
+                                <strong>
+                                    {formatValue(si.consignee)}
+                                </strong>
+                            </span>
+                        </div>
+                    </article>
+
+                    <article className="resolve-card">
+                        <h3>Resolve mismatch</h3>
+
+                        <p>
+                            Which value should be accepted for{" "}
+                            {defectLabel.toLowerCase()}?
+                        </p>
+
+                        <div className="choice-row">
+                            <button
+                                className={
+                                    choice === "SI" ? "selected" : ""
+                                }
+                                onClick={() => setChoice("SI")}
+                            >
+                                Confirm SI
+                            </button>
+
+                            <button
+                                className={
+                                    choice === "BL" ? "selected" : ""
+                                }
+                                onClick={() => setChoice("BL")}
+                            >
+                                Confirm BL
+                            </button>
+                        </div>
+
+                        <textarea
+                            value={notes}
+                            onChange={(e) => setNotes(e.target.value)}
+                            placeholder="Add an optional review note..."
+                        />
+
+                        <div className="form-actions">
+                            <button
+                                className="secondary"
+                                onClick={onBack}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                className="primary"
+                                disabled={!choice}
+                                onClick={() => setSaved(true)}
+                            >
+                                {saved ? "Saved ✓" : "Resolve case"}
+                            </button>
+                        </div>
+                    </article>
                 </div>
             </section>
         );
     }
 
+    // NEEDS_REVIEW
+
+    const reviewReasonLabels: Record<string, string> = {
+        missing_value: "Information is missing",
+        missing_attachment: "Attachment is missing",
+        wrong_doc_type: "Incorrect document type",
+        unreadable: "Document is unreadable",
+    };
+
+    const reviewReason =
+        reviewReasonLabels[item.raw?.review_reason] ||
+        "This case requires review";
+
     return (
         <section className="detail-page">
-            <button className="back-link" onClick={onBack}>← Review Queue</button>
-            <div className="detail-title-row"><div><h1>Add shipping details</h1><p>Complete the missing information for this document review.</p></div><span className="status needs_review">● Needs review</span></div>
-            <div className="case-summary"><span>Email ID<strong>{item.emailId}</strong></span><span>Issue<strong>{item.issue}</strong></span><span>Shipping Instruction<strong>{item.si}</strong></span><span>Bill of Lading<strong className="missing">{item.bl}</strong></span></div>
-            <form className="details-form" onSubmit={(e) => { e.preventDefault(); setSaved(true); }}>
-                <div><h2>Shipment information</h2><p>Fields marked with * are required before you continue.</p></div>
-                <div className="form-grid"><label>Gross weight *<input required value={weight} onChange={(e) => setWeight(e.target.value)} /></label><label>Weight unit *<select required defaultValue="kg"><option value="kg">kg</option><option value="tonnes">tonnes</option></select></label><label>Container count *<input required value={containerCount} onChange={(e) => setContainerCount(e.target.value)} placeholder="Enter container count" /></label><label>Package type *<select required value={packageType} onChange={(e) => setPackageType(e.target.value)}><option value="">Select package type</option><option>Cartons</option><option>Pallets</option><option>Crates</option></select></label><label>Port of loading *<input required defaultValue="Singapore" /></label><label>Port of discharge *<input required defaultValue="Rotterdam" /></label></div>
-                <label className="notes-label">Review notes<textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Add context for the reviewer or note how the value was verified..." /></label>
-                <div className="form-footer"><small>* Required fields</small><div className="form-actions"><button type="button" className="secondary" onClick={onBack}>Cancel</button><button className="primary" type="submit">{saved ? "Saved ✓" : "Save and continue →"}</button></div></div>
+            <button className="back-link" onClick={onBack}>
+                ← Review Queue
+            </button>
+
+            <div className="detail-title-row">
+                <div>
+                    <h1>{reviewReason}</h1>
+
+                    <p>
+                        Review the available document information and
+                        complete any missing fields.
+                    </p>
+                </div>
+
+                <span className="status needs_review">
+                    ● Needs review
+                </span>
+            </div>
+
+            <div className="case-summary">
+                <span>
+                    Email ID
+                    <strong>{item.emailId}</strong>
+                </span>
+
+                <span>
+                    Subject
+                    <strong>
+                        {item.raw?.subject || "Not available"}
+                    </strong>
+                </span>
+
+                <span>
+                    Shipping Instruction
+                    <strong>
+                        {si.document_type || "Not available"}
+                    </strong>
+                </span>
+
+                <span>
+                    Bill of Lading
+                    <strong>
+                        {bl.document_type || "Not available"}
+                    </strong>
+                </span>
+            </div>
+
+            <div className="document-grid">
+                <article className="document-card">
+                    <div className="doc-heading">
+                        <span>▤</span>
+
+                        <div>
+                            <h3>Shipping Instruction</h3>
+                            <small>
+                                {formatValue(si.document_type)}
+                            </small>
+                        </div>
+
+                        <em>
+                            {Object.values(si).some(
+                                (value) =>
+                                    value !== null &&
+                                    value !== undefined &&
+                                    value !== ""
+                            )
+                                ? "Available"
+                                : "Missing"}
+                        </em>
+                    </div>
+
+                    <dl>
+                        {renderDocumentField(
+                            "Shipper",
+                            si.shipper
+                        )}
+
+                        {renderDocumentField(
+                            "Consignee",
+                            si.consignee
+                        )}
+
+                        {renderDocumentField(
+                            "Notify Party",
+                            si.notify_party
+                        )}
+
+                        {renderDocumentField(
+                            "Port of loading",
+                            si.port_of_loading
+                        )}
+
+                        {renderDocumentField(
+                            "Port of discharge",
+                            si.port_of_discharge
+                        )}
+
+                        {renderDocumentField(
+                            "Container count",
+                            si.container_count
+                        )}
+
+                        {renderDocumentField(
+                            "Gross weight (kg)",
+                            si.gross_weight_kg
+                        )}
+                    </dl>
+                </article>
+
+                <article className="document-card">
+                    <div className="doc-heading">
+                        <span>▤</span>
+
+                        <div>
+                            <h3>Bill of Lading</h3>
+                            <small>
+                                {formatValue(bl.document_type)}
+                            </small>
+                        </div>
+
+                        <em>
+                            {Object.values(bl).some(
+                                (value) =>
+                                    value !== null &&
+                                    value !== undefined &&
+                                    value !== ""
+                            )
+                                ? "Available"
+                                : "Missing"}
+                        </em>
+                    </div>
+
+                    <dl>
+                        <div>
+                            <dt>Shipper</dt>
+                            <dd>{formatValue(bl.shipper)}</dd>
+                        </div>
+
+                        <div>
+                            <dt>Consignee</dt>
+                            <dd>{formatValue(bl.consignee)}</dd>
+                        </div>
+
+                        <div>
+                            <dt>Notify Party</dt>
+                            <dd>{formatValue(bl.notify_party)}</dd>
+                        </div>
+
+                        <div>
+                            <dt>Port of loading</dt>
+                            <dd>{formatValue(bl.port_of_loading)}</dd>
+                        </div>
+
+                        <div>
+                            <dt>Port of discharge</dt>
+                            <dd>{formatValue(bl.port_of_discharge)}</dd>
+                        </div>
+
+                        <div>
+                            <dt>Container count</dt>
+                            <dd>{formatValue(bl.container_count)}</dd>
+                        </div>
+
+                        <div>
+                            <dt>Gross weight (kg)</dt>
+                            <dd>{formatValue(bl.gross_weight_kg)}</dd>
+                        </div>
+                    </dl>
+                </article>
+            </div>
+
+            <form
+                className="details-form"
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    setSaved(true);
+                }}
+                style={{ marginTop: "14px" }}
+            >
+                <div>
+                    <h2>Complete available information</h2>
+
+                    <p>
+                        Fill in the missing Shipping Instruction values
+                        before continuing.
+                    </p>
+                </div>
+
+                <div className="form-grid">
+                    <label>
+                        Gross weight (kg)
+                        <input
+                            value={weight}
+                            onChange={(e) =>
+                                setWeight(e.target.value)
+                            }
+                            placeholder="Enter gross weight"
+                        />
+                    </label>
+
+                    <label>
+                        Container count
+                        <input
+                            value={containerCount}
+                            onChange={(e) =>
+                                setContainerCount(e.target.value)
+                            }
+                            placeholder="Enter container count"
+                        />
+                    </label>
+
+                    <label>
+                        Port of loading
+                        <input
+                            value={portOfLoading}
+                            onChange={(e) =>
+                                setPortOfLoading(e.target.value)
+                            }
+                            placeholder="Enter port of loading"
+                        />
+                    </label>
+
+                    <label>
+                        Port of discharge
+                        <input
+                            value={portOfDischarge}
+                            onChange={(e) =>
+                                setPortOfDischarge(e.target.value)
+                            }
+                            placeholder="Enter port of discharge"
+                        />
+                    </label>
+                </div>
+
+                <label className="notes-label">
+                    Review notes
+                    <textarea
+                        value={notes}
+                        onChange={(e) =>
+                            setNotes(e.target.value)
+                        }
+                        placeholder="Add context for the reviewer or note how the value was verified..."
+                    />
+                </label>
+
+                <div className="form-footer">
+                    <small>
+                        Review reason: {item.raw?.review_reason}
+                    </small>
+
+                    <div className="form-actions">
+                        <button
+                            type="button"
+                            className="secondary"
+                            onClick={onBack}
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            className="primary"
+                            type="submit"
+                        >
+                            {saved
+                                ? "Saved ✓"
+                                : "Save and continue →"}
+                        </button>
+                    </div>
+                </div>
             </form>
         </section>
     );
@@ -236,20 +768,120 @@ function ResolvedCases() {
 
 export default function ReviewQueue() {
     const [query, setQuery] = useState("");
-    const [status, setStatus] = useState<"ALL" | ReviewStatus>("ALL");
-    const [selectedCase, setSelectedCase] = useState<ReviewCase | null>(null);
-    const [currentPage, setCurrentPage] = useState<"dashboard" | "queue" | "resolved">("queue");
+    const [status, setStatus] =
+        useState<"ALL" | ReviewStatus>("ALL");
+
+    const [selectedCase, setSelectedCase] =
+        useState<ReviewCase | null>(null);
+
+    const [currentPage, setCurrentPage] =
+        useState<"dashboard" | "queue" | "resolved">("queue");
+
+    const [data, setData] =
+        useState<Record<string, any>>({});
+
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getResults()
+            .then((result) => {
+                setData(result);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error(error);
+                setLoading(false);
+            });
+    }, []);
+
+    const reviewCases = useMemo<ReviewCase[]>(() => {
+        return Object.entries(data)
+            .filter(([, item]: [string, any]) =>
+                item.status === "MISMATCH" ||
+                item.status === "NEEDS_REVIEW"
+            )
+            .map(([emailId, item]: [string, any]) => {
+                let issue = "Requires review";
+
+                if (item.status === "MISMATCH") {
+                    const field = item.defect_fields?.[0];
+
+                    const fieldLabels: Record<string, string> = {
+                        shipper: "Shipper mismatch",
+                        consignee: "Consignee mismatch",
+                        notify_party: "Notify party mismatch",
+                        port_of_loading: "Port of loading mismatch",
+                        port_of_discharge: "Port of discharge mismatch",
+                        container_count: "Container count mismatch",
+                        gross_weight_kg: "Gross weight mismatch",
+                    };
+
+                    issue =
+                        fieldLabels[field] ||
+                        "Document mismatch";
+                } else {
+                    const reasonLabels: Record<string, string> = {
+                        missing_value: "Information missing",
+                        missing_attachment: "Attachment missing",
+                        wrong_doc_type: "Incorrect document type",
+                        unreadable: "Document unreadable",
+                    };
+
+                    issue =
+                        reasonLabels[item.review_reason] ||
+                        "Requires review";
+                }
+
+                return {
+                    emailId,
+                    issue,
+
+                    // These are only display values for the table.
+                    // The actual backend object is kept in raw.
+                    si:item.si && Object.values(item.si).some(
+                            (value) => value !== null && value !== undefined && value !== "")
+                            ? "Available"
+                            : "Not available",
+
+                    bl:
+                        item.bl &&
+                        Object.values(item.bl).some(
+                            (value) => value !== null && value !== undefined && value !== ""
+                        )
+                            ? "Available"
+                            : "Not available",
+
+                    status: item.status,
+                    priority:
+                        item.status === "NEEDS_REVIEW"
+                            ? "High"
+                            : "Medium",
+
+                    received:
+                        item.received ||
+                        item.created_at ||
+                        "Recently",
+
+                    raw: item,
+                };
+            });
+    }, [data]);
 
     const filteredCases = useMemo(() => {
-        const search = query.trim().toLowerCase();
-        return reviewCases.filter((item) => {
-            const matchesSearch = !search ||
-                item.emailId.toLowerCase().includes(search) ||
-                item.issue.toLowerCase().includes(search);
-            const matchesStatus = status === "ALL" || item.status === status;
-            return matchesSearch && matchesStatus;
-        });
-    }, [query, status]);
+    const search = query.trim().toLowerCase();
+
+    return reviewCases.filter((item) => {
+        const matchesSearch =
+            !search ||
+            item.emailId.toLowerCase().includes(search) ||
+            item.issue.toLowerCase().includes(search);
+
+        const matchesStatus =
+            status === "ALL" || item.status === status;
+
+        return matchesSearch && matchesStatus;
+    });
+}, [query, status, reviewCases]);
 
     return (
         <div className="review-app">
@@ -267,11 +899,43 @@ export default function ReviewQueue() {
                     </div>
 
                     <section className="stats" aria-label="Review summary">
-                        <StatCard label="Pending Reviews" value={12} tone="blue" symbol="□" detail="4 added today" />
-                        <StatCard label="Mismatches" value={7} tone="red" symbol="!" detail="2 high priority" />
-                        <StatCard label="Missing Information" value={3} tone="amber" symbol="≡" detail="Action required" />
-                        <StatCard label="Resolved Today" value={18} tone="green" symbol="✓" detail="72% completion rate" />
-                    </section>
+                        <StatCard
+                            label="Pending Reviews"
+                            value={reviewCases.length}
+                            tone="blue"
+                            symbol="□"
+                            detail="Cases requiring attention"
+                        />
+
+                        <StatCard
+                            label="Mismatches"
+                            value={reviewCases.filter(
+                                (item) => item.status === "MISMATCH"
+                            ).length}
+                            tone="red"
+                            symbol="!"
+                            detail="Document differences detected"
+                        />
+
+                        <StatCard
+                            label="Missing Information"
+                            value={reviewCases.filter(
+                                (item) => item.status === "NEEDS_REVIEW"
+                            ).length}
+                            tone="amber"
+                            symbol="≡"
+                            detail="Action required"
+                        />
+
+                        <StatCard
+                            label="Resolved"
+                            value={Object.values(data).filter(
+                                (item: any) => item.status === "OK"
+                            ).length}
+                            tone="green"
+                            symbol="✓"
+                            detail="No issues detected"
+                        /></section>
 
                     <section className="queue-panel">
                         <div className="panel-heading">
@@ -314,7 +978,9 @@ export default function ReviewQueue() {
                         </div>
 
                         <footer className="panel-footer">
-                            <span>Showing {filteredCases.length} of {reviewCases.length} demo cases</span>
+                            <span>
+                                Showing {filteredCases.length} of {reviewCases.length} cases
+                            </span>
                             <div><button disabled>‹</button><button className="current">1</button><button>2</button><button>3</button><button>›</button></div>
                         </footer>
                     </section>
@@ -337,7 +1003,7 @@ export default function ReviewQueue() {
                     top:0;
                     height:100vh;
                     padding:25px 18px 20px;
-                    cor:#6B625B;
+                    color:#6B625B;
                     background:#FFFDF9;
                     display:flex;
                     flex-direction:column;
