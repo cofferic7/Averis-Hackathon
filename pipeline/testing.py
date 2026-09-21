@@ -1,25 +1,14 @@
-import sys, time
-sys.path.insert(0, "server")
-from loader import Inbox
-from pipeline.extract_fields import process_email as extract_email_fields
-from pipeline.compare import compare_shipment_data
+import json
+import glob
+from collections import Counter
 
-inbox = {e["email_id"]: e for e in Inbox("data_v2")}
-test_ids = [f"email_{i}" for i in range(501, 521)]
+all_ids = []
+for path in glob.glob("output/submission_*.json"):
+    with open(path) as f:
+        data = json.load(f)
+        all_ids.extend(data.keys())
+        print(f"{path}: {len(data)} entries")
 
-def run_with_retry(email, data_dir, max_retries=5):
-    for attempt in range(max_retries):
-        try:
-            extraction = extract_email_fields(email, data_dir)
-            return compare_shipment_data(extraction)
-        except Exception as e:
-            if "429" in str(e):
-                time.sleep(70)
-            else:
-                raise
-    raise RuntimeError(f"gave up on {email['email_id']}")
-
-for eid in test_ids:
-    if eid in inbox:
-        result = run_with_retry(inbox[eid], "data_v2")
-        print(eid, "->", result["status"], "/", result["review_reason"], "/", result["defect_fields"])
+counts = Counter(all_ids)
+duplicates = {eid: c for eid, c in counts.items() if c > 1}
+print("\nDuplicate email_id(s):", duplicates)
