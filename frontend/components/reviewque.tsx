@@ -143,10 +143,10 @@ function CaseDetail({ item, onBack }: { item: ReviewCase; onBack: () => void }) 
 }
 
 const resolvedCases = [
-    { emailId: "email_004", reviewId: "REV-004", result: "APPROVED", reviewer: "Sarah Lee", date: "20 Sep 2026, 3:42 PM" },
-    { emailId: "email_011", reviewId: "REV-011", result: "CORRECTED", reviewer: "Amir Khan", date: "20 Sep 2026, 2:18 PM" },
-    { emailId: "email_017", reviewId: "REV-017", result: "APPROVED", reviewer: "Sarah Lee", date: "19 Sep 2026, 5:05 PM" },
-    { emailId: "email_022", reviewId: "REV-022", result: "REJECTED", reviewer: "John Tan", date: "19 Sep 2026, 11:30 AM" },
+    { emailId: "email_004", reviewId: "REV-004", result: "APPROVED", date: "20 Sep 2026, 3:42 PM" },
+    { emailId: "email_011", reviewId: "REV-011", result: "CORRECTED", date: "20 Sep 2026, 2:18 PM" },
+    { emailId: "email_017", reviewId: "REV-017", result: "APPROVED", date: "19 Sep 2026, 5:05 PM" },
+    { emailId: "email_022", reviewId: "REV-022", result: "REJECTED", date: "19 Sep 2026, 11:30 AM" },
 ];
 
 type EmailType = "CHECK_DOCUMENT" | "SPAM" | "NEW_SHIPPING_INSTRUCTION" | "INVOICE_QUESTION" | "OPERATIONAL_UPDATE";
@@ -221,15 +221,15 @@ function ResolvedCases() {
             <section className="resolved-stats">
                 <StatCard label="Total Resolved" value={24} tone="blue" symbol="▤" detail="All completed cases" />
                 <StatCard label="Approved" value={18} tone="green" symbol="✓" detail="No changes required" />
-                <StatCard label="Corrected & Approved" value={5} tone="amber" symbol="✎" detail="Updated by reviewer" />
+                <StatCard label="Corrected & Approved" value={5} tone="amber" symbol="✎" detail="Updated after review" />
                 <StatCard label="Rejected" value={1} tone="red" symbol="×" detail="Documents invalid" />
             </section>
             <section className="queue-panel">
-                <div className="resolved-toolbar"><div><h2>Resolved Review Cases</h2><p>A complete history of human-reviewed decisions</p></div><label className="search-box"><Icon name="search" /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search email ID or review ID" /></label><select value={resultFilter} onChange={(e) => setResultFilter(e.target.value)}><option value="ALL">All results</option><option value="APPROVED">Approved</option><option value="CORRECTED">Corrected</option><option value="REJECTED">Rejected</option></select></div>
-                <div className="table-wrap"><table><thead><tr><th>Email ID</th><th>Review ID</th><th>Final result</th><th>Reviewer</th><th>Resolved date</th><th>Actions</th></tr></thead><tbody>{rows.map((item) => <tr key={item.reviewId}><td><strong>{item.emailId}</strong></td><td>{item.reviewId}</td><td><span className={`final-result ${item.result.toLowerCase()}`}>{item.result}</span></td><td>{item.reviewer}</td><td>{item.date}</td><td><button className="view-button" onClick={() => setViewing(item)}>View Details</button></td></tr>)}</tbody></table>{!rows.length && <div className="empty"><strong>No resolved cases found</strong><p>Try another search or result filter.</p></div>}</div>
+                <div className="resolved-toolbar"><div><h2>Resolved Review Cases</h2><p>A history of completed decisions</p></div><label className="search-box"><Icon name="search" /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search email ID or review ID" /></label><select value={resultFilter} onChange={(e) => setResultFilter(e.target.value)}><option value="ALL">All results</option><option value="APPROVED">Approved</option><option value="CORRECTED">Corrected</option><option value="REJECTED">Rejected</option></select></div>
+                <div className="table-wrap"><table><thead><tr><th>Email ID</th><th>Review ID</th><th>Final result</th><th>Resolved date</th><th>Actions</th></tr></thead><tbody>{rows.map((item) => <tr key={item.reviewId}><td><strong>{item.emailId}</strong></td><td>{item.reviewId}</td><td><span className={`final-result ${item.result.toLowerCase()}`}>{item.result}</span></td><td>{item.date}</td><td><button className="view-button" onClick={() => setViewing(item)}>View Details</button></td></tr>)}</tbody></table>{!rows.length && <div className="empty"><strong>No resolved cases found</strong><p>Try another search or result filter.</p></div>}</div>
                 <footer className="panel-footer"><span>Showing {rows.length} of 24 resolved cases</span><div><button disabled>Previous</button><button className="current">1</button><button>2</button><button>3</button><button>Next</button></div></footer>
             </section>
-            {viewing && <div className="modal-backdrop" onMouseDown={() => setViewing(null)}><section className="modal" onMouseDown={(e) => e.stopPropagation()}><button className="modal-close" onClick={() => setViewing(null)}>×</button><span className="eyebrow">RESOLVED REVIEW</span><h2>{viewing.reviewId}</h2><p>{viewing.emailId}</p><div className="resolved-detail"><span>Final result<strong className={`final-text ${viewing.result.toLowerCase()}`}>{viewing.result}</strong></span><span>Reviewer<strong>{viewing.reviewer}</strong></span><span>Resolved date<strong>{viewing.date}</strong></span><span>Documents<strong>SI and BL reviewed</strong></span></div><div className="modal-actions"><button className="primary" onClick={() => setViewing(null)}>Close</button></div></section></div>}
+            {viewing && <div className="modal-backdrop" onMouseDown={() => setViewing(null)}><section className="modal" onMouseDown={(e) => e.stopPropagation()}><button className="modal-close" onClick={() => setViewing(null)}>×</button><span className="eyebrow">RESOLVED REVIEW</span><h2>{viewing.reviewId}</h2><p>{viewing.emailId}</p><div className="resolved-detail"><span>Final result<strong className={`final-text ${viewing.result.toLowerCase()}`}>{viewing.result}</strong></span><span>Resolved date<strong>{viewing.date}</strong></span><span>Documents<strong>SI and BL reviewed</strong></span></div><div className="modal-actions"><button className="primary" onClick={() => setViewing(null)}>Close</button></div></section></div>}
         </section>
     );
 }
@@ -277,12 +277,6 @@ export default function ReviewQueue() {
             <main>
                 <header className="topbar">
                     <div><span>Workspace</span><Icon name="chevron" /><b>{currentPage === "dashboard" ? "Dashboard" : currentPage === "resolved" ? "Resolved Cases" : "Review Queue"}</b></div>
-                    <div className="user-area">
-                        <button className="icon-button" aria-label="Notifications"><Icon name="bell" /><i /></button>
-                        <div className="avatar">OU</div>
-                        <div><strong>Operations User</strong><span>Reviewer</span></div>
-                        <span className="down">⌄</span>
-                    </div>
                 </header>
 
                 {currentPage === "dashboard" ? <Dashboard openReviewQueue={() => setCurrentPage("queue")} /> : currentPage === "resolved" ? <ResolvedCases /> : selectedCase ? <CaseDetail item={selectedCase} onBack={() => setSelectedCase(null)} /> : <section className="content">
