@@ -33,6 +33,8 @@ type ResolvedRecord = {
 const REVIEW_STORAGE_KEY = "shipops_resolved_cases_v1";
 
 function loadResolvedCases(): ResolvedRecord[] {
+    if (typeof window === "undefined") return []; // Add this guard
+
     try {
         const saved = JSON.parse(localStorage.getItem(REVIEW_STORAGE_KEY) || "[]");
         return Array.isArray(saved) ? saved : [];
@@ -42,6 +44,8 @@ function loadResolvedCases(): ResolvedRecord[] {
 }
 
 function storeResolvedCases(cases: ResolvedRecord[]): void {
+    if (typeof window === "undefined") return; // Add this guard
+
     localStorage.setItem(REVIEW_STORAGE_KEY, JSON.stringify(cases));
     window.dispatchEvent(new Event("shipops-reviews-changed"));
 }
@@ -796,14 +800,16 @@ function ResolvedCases({ cases }: { cases: ResolvedRecord[] }) {
     });
     const formatRecordValue = (value: any) => value === null || value === undefined || value === "" ? "Missing" : String(value);
     const exportReport = () => {
-        const blob = new Blob([JSON.stringify(cases, null, 2)], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const anchor = document.createElement("a");
-        anchor.href = url;
-        anchor.download = "resolved_cases.json";
-        anchor.click();
-        URL.revokeObjectURL(url);
-    };
+    if (typeof window === "undefined") return; // Add this guard
+
+    const blob = new Blob([JSON.stringify(cases, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "resolved_cases.json";
+    anchor.click();
+    URL.revokeObjectURL(url);
+};
 
     return (
         <section className="resolved-page">
@@ -989,7 +995,7 @@ export default function ReviewQueue({ initialPage = "queue" }: { initialPage?: "
                             <h1>Shipping Document Review</h1>
                             <p>Review mismatches and complete missing information before approving each case.</p>
                         </div>
-                        <button className="refresh" onClick={() => window.location.reload()}>↻ Refresh queue</button>
+                        <button className="refresh" onClick={() => typeof window !== 'undefined' && window.location.reload()}>↻ Refresh queue</button>
                     </div>
 
                     <section className="stats" aria-label="Review summary">
