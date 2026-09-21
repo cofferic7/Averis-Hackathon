@@ -12,7 +12,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-DATA_PATH = Path("output/report_data.json")
+DATA_PATH = Path(__file__).resolve().parent.parent / "output" / "report_data.json"
 
 
 def load_data() -> dict:
