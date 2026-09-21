@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 function Icon({
   type,
@@ -47,6 +48,12 @@ function Icon({
 }
 
 export default function Navbar() {
+  const pathname = usePathname();
+
+  const dashboardActive = pathname === "/";
+  const reviewQueueActive = pathname === "/reviewqueue";
+  const resolvedActive = pathname === "/resolved";
+
   return (
     <aside className="fixed left-0 top-0 flex h-screen w-[230px] flex-col border-r border-[#EEE9E3] bg-[#FFE4D1] px-[18px] py-[25px] text-[#6B625B] shadow-[8px_0_30px_rgba(120,80,40,0.06)]">
 
@@ -73,7 +80,11 @@ export default function Navbar() {
         {/* Dashboard */}
         <Link
           href="/"
-          className="group flex h-12 items-center gap-[13px] rounded-[10px] border border-[#FED7AA] bg-[#FFF1E8] px-[13px] text-sm font-medium text-[#C2410C] shadow-[0_4px_12px_rgba(234,88,12,0.06)] transition-all duration-200 hover:-translate-y-[1px] hover:shadow-[0_6px_16px_rgba(234,88,12,0.10)]"
+          className={`group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm font-medium transition-all duration-200 ${
+            dashboardActive
+              ? "border border-[#FED7AA] bg-[#FFF1E8] text-[#C2410C] shadow-[0_4px_12px_rgba(234,88,12,0.06)]"
+              : "text-[#6B625B] hover:-translate-y-[1px] hover:bg-[#FFF5EF] hover:text-[#C2410C] hover:shadow-[0_6px_16px_rgba(234,88,12,0.10)]"
+          }`}
         >
           <Icon type="home" />
           <span>Dashboard</span>
@@ -82,13 +93,23 @@ export default function Navbar() {
         {/* Review Queue */}
         <Link
           href="/reviewqueue"
-          className="group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm text-[#6B625B] transition-all duration-200 hover:translate-x-[2px] hover:bg-[#FFF5EF] hover:text-[#C2410C]"
+          className={`group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm transition-all duration-200 ${
+            reviewQueueActive
+              ? "border border-[#FED7AA] bg-[#FFF1E8] font-medium text-[#C2410C] shadow-[0_4px_12px_rgba(234,88,12,0.06)]"
+              : "text-[#6B625B] hover:translate-x-[2px] hover:bg-[#FFF5EF] hover:text-[#C2410C]"
+          }`}
         >
           <Icon type="queue" />
 
           <span>Review Queue</span>
 
-          <b className="ml-auto grid h-[23px] min-w-[23px] place-items-center rounded-full bg-[#FDE8D7] px-[6px] text-[11px] font-semibold text-[#C2410C] transition-colors duration-200 group-hover:bg-[#EA580C] group-hover:text-white">
+          <b
+            className={`ml-auto grid h-[23px] min-w-[23px] place-items-center rounded-full px-[6px] text-[11px] font-semibold transition-colors duration-200 ${
+              reviewQueueActive
+                ? "bg-[#EA580C] text-white"
+                : "bg-[#FDE8D7] text-[#C2410C] group-hover:bg-[#EA580C] group-hover:text-white"
+            }`}
+          >
             12
           </b>
         </Link>
@@ -96,7 +117,11 @@ export default function Navbar() {
         {/* Resolved Cases */}
         <Link
           href="/resolved"
-          className="group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm text-[#6B625B] transition-all duration-200 hover:translate-x-[2px] hover:bg-[#FFF5EF] hover:text-[#C2410C]"
+          className={`group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm transition-all duration-200 ${
+            resolvedActive
+              ? "border border-[#FED7AA] bg-[#FFF1E8] font-medium text-[#C2410C] shadow-[0_4px_12px_rgba(234,88,12,0.06)]"
+              : "text-[#6B625B] hover:translate-x-[2px] hover:bg-[#FFF5EF] hover:text-[#C2410C]"
+          }`}
         >
           <Icon type="check" />
           <span>Resolved Cases</span>

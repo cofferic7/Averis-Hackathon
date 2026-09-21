@@ -255,15 +255,6 @@ export default function ReviewQueue() {
         <div className="review-app">
 
             <main>
-                <header className="topbar">
-                    <div><span>Workspace</span><Icon name="chevron" /><b>{currentPage === "dashboard" ? "Dashboard" : currentPage === "resolved" ? "Resolved Cases" : "Review Queue"}</b></div>
-                    <div className="user-area">
-                        <button className="icon-button" aria-label="Notifications"><Icon name="bell" /><i /></button>
-                        <div className="avatar">OU</div>
-                        <div><strong>Operations User</strong><span>Reviewer</span></div>
-                        <span className="down">⌄</span>
-                    </div>
-                </header>
 
                 {currentPage === "dashboard" ? <Dashboard openReviewQueue={() => setCurrentPage("queue")} /> : currentPage === "resolved" ? <ResolvedCases /> : selectedCase ? <CaseDetail item={selectedCase} onBack={() => setSelectedCase(null)} /> : <section className="content">
                     <div className="page-heading">
@@ -333,16 +324,9 @@ export default function ReviewQueue() {
             <style>{`
                 *{box-sizing:border-box}
 
-                body{
-                    margin:0;
-                    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-                    color:#292524;
-                    background:#F8FAFC
-                }
-
                 .review-app{
-                    .review-app{
                     min-height:100vh;
+                    color:#292524;
                     background:#F8FAFC;
                 }
 
@@ -353,7 +337,7 @@ export default function ReviewQueue() {
                     top:0;
                     height:100vh;
                     padding:25px 18px 20px;
-                    color:#6B625B;
+                    cor:#6B625B;
                     background:#FFFDF9;
                     display:flex;
                     flex-direction:column;
