@@ -1,0 +1,2904 @@
+[
+  {
+    "review_id": "3ec46f4c-0520-4904-b822-db95c939a331",
+    "email_id": "email_176",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_176",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_176",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T13:56:44.378725+00:00",
+    "updated_at": "2026-09-20T13:56:44.378725+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "26773973-1218-4b52-bdcf-a53e2d02f1e0",
+    "email_id": "email_178",
+    "review_status": "PENDING",
+    "initial_status": "MISMATCH",
+    "review_reason": null,
+    "message": "Mismatch found in: container_count",
+    "original_extraction_payload": {
+      "email_id": "email_178",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "ORIENT LINKS CO (LLC)",
+        "notify_party": "3S PAPER PRODUCTS SDN BHD",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "port_of_discharge": "CALLAO, PERU (PECLL)",
+        "container_count": 6,
+        "gross_weight_kg": 132516.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "ORIENT LINKS CO (LLC)",
+        "notify_party": "3S PAPER PRODUCTS SDN BHD",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "port_of_discharge": "CALLAO, PERU (PECLL)",
+        "container_count": 7,
+        "gross_weight_kg": 132516.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_178",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "ORIENT LINKS CO (LLC)",
+        "notify_party": "3S PAPER PRODUCTS SDN BHD",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "port_of_discharge": "CALLAO, PERU (PECLL)",
+        "container_count": 6,
+        "gross_weight_kg": 132516.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "ORIENT LINKS CO (LLC)",
+        "notify_party": "3S PAPER PRODUCTS SDN BHD",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "port_of_discharge": "CALLAO, PERU (PECLL)",
+        "container_count": 7,
+        "gross_weight_kg": 132516.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "APRIL FAR EAST (M) SDN BHD",
+        "BL": "APRIL FAR EAST (M) SDN BHD",
+        "normalized_SI": "april far east (m) sdn bhd",
+        "normalized_BL": "april far east (m) sdn bhd"
+      },
+      "consignee": {
+        "SI": "ORIENT LINKS CO (LLC)",
+        "BL": "ORIENT LINKS CO (LLC)",
+        "normalized_SI": "orient links co (llc)",
+        "normalized_BL": "orient links co (llc)"
+      },
+      "notify_party": {
+        "SI": "3S PAPER PRODUCTS SDN BHD",
+        "BL": "3S PAPER PRODUCTS SDN BHD",
+        "normalized_SI": "3s paper products sdn bhd",
+        "normalized_BL": "3s paper products sdn bhd"
+      },
+      "port_of_loading": {
+        "SI": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "BL": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "normalized_SI": "port klang (westport), malaysia (mypkg)",
+        "normalized_BL": "port klang (westport), malaysia (mypkg)"
+      },
+      "port_of_discharge": {
+        "SI": "CALLAO, PERU (PECLL)",
+        "BL": "CALLAO, PERU (PECLL)",
+        "normalized_SI": "callao, peru (pecll)",
+        "normalized_BL": "callao, peru (pecll)"
+      },
+      "container_count": {
+        "SI": 6,
+        "BL": 7,
+        "normalized_SI": 6,
+        "normalized_BL": 7
+      },
+      "gross_weight_kg": {
+        "SI": 132516.0,
+        "BL": 132516.0,
+        "normalized_SI": 132516.0,
+        "normalized_BL": 132516.0
+      }
+    },
+    "initial_defect_fields": [
+      "container_count"
+    ],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T13:56:53.295599+00:00",
+    "updated_at": "2026-09-20T13:56:53.295599+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "989d454f-c1fe-423a-bbfa-f21191318a03",
+    "email_id": "email_182",
+    "review_status": "PENDING",
+    "initial_status": "MISMATCH",
+    "review_reason": null,
+    "message": "Mismatch found in: port_of_discharge, container_count",
+    "original_extraction_payload": {
+      "email_id": "email_182",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "KTP CO., LTD",
+        "notify_party": "KTP CO., LTD",
+        "port_of_loading": "NANTONG, CHINA (CNNTG)",
+        "port_of_discharge": "APAPA, NIGERIA (NGAPP)",
+        "container_count": 5,
+        "gross_weight_kg": 100240.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "KTP CO., LTD",
+        "notify_party": "KTP CO., LTD",
+        "port_of_loading": "NANTONG, CHINA (CNNTG)",
+        "port_of_discharge": "BALTIMORE, US (NGAPP)",
+        "container_count": 6,
+        "gross_weight_kg": 100240.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_182",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "KTP CO., LTD",
+        "notify_party": "KTP CO., LTD",
+        "port_of_loading": "NANTONG, CHINA (CNNTG)",
+        "port_of_discharge": "APAPA, NIGERIA (NGAPP)",
+        "container_count": 5,
+        "gross_weight_kg": 100240.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "KTP CO., LTD",
+        "notify_party": "KTP CO., LTD",
+        "port_of_loading": "NANTONG, CHINA (CNNTG)",
+        "port_of_discharge": "BALTIMORE, US (NGAPP)",
+        "container_count": 6,
+        "gross_weight_kg": 100240.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "APRIL FAR EAST (M) SDN BHD",
+        "BL": "APRIL FAR EAST (M) SDN BHD",
+        "normalized_SI": "april far east (m) sdn bhd",
+        "normalized_BL": "april far east (m) sdn bhd"
+      },
+      "consignee": {
+        "SI": "KTP CO., LTD",
+        "BL": "KTP CO., LTD",
+        "normalized_SI": "ktp co., ltd",
+        "normalized_BL": "ktp co., ltd"
+      },
+      "notify_party": {
+        "SI": "KTP CO., LTD",
+        "BL": "KTP CO., LTD",
+        "normalized_SI": "ktp co., ltd",
+        "normalized_BL": "ktp co., ltd"
+      },
+      "port_of_loading": {
+        "SI": "NANTONG, CHINA (CNNTG)",
+        "BL": "NANTONG, CHINA (CNNTG)",
+        "normalized_SI": "nantong, china (cnntg)",
+        "normalized_BL": "nantong, china (cnntg)"
+      },
+      "port_of_discharge": {
+        "SI": "APAPA, NIGERIA (NGAPP)",
+        "BL": "BALTIMORE, US (NGAPP)",
+        "normalized_SI": "apapa, nigeria (ngapp)",
+        "normalized_BL": "baltimore, us (ngapp)"
+      },
+      "container_count": {
+        "SI": 5,
+        "BL": 6,
+        "normalized_SI": 5,
+        "normalized_BL": 6
+      },
+      "gross_weight_kg": {
+        "SI": 100240.0,
+        "BL": 100240.0,
+        "normalized_SI": 100240.0,
+        "normalized_BL": 100240.0
+      }
+    },
+    "initial_defect_fields": [
+      "port_of_discharge",
+      "container_count"
+    ],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T13:57:02.281744+00:00",
+    "updated_at": "2026-09-20T13:57:02.281744+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "48541019-73f6-4e16-b17c-ac1886c6cbe2",
+    "email_id": "email_186",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_186",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_186",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T13:58:18.257151+00:00",
+    "updated_at": "2026-09-20T13:58:18.257151+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "764895e4-ccfc-4e10-9f71-e84d503d6249",
+    "email_id": "email_187",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_187",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_187",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T13:58:21.703346+00:00",
+    "updated_at": "2026-09-20T13:58:21.703346+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "053790f8-7461-4ef1-afcd-f6b8861f50a8",
+    "email_id": "email_189",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_189",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_189",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T13:58:25.953238+00:00",
+    "updated_at": "2026-09-20T13:58:25.953238+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "35269147-737f-4904-8648-ecb9ffa931b4",
+    "email_id": "email_190",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_190",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_190",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T13:58:27.205295+00:00",
+    "updated_at": "2026-09-20T13:58:27.205295+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "caa85f6e-2e61-4942-bb3b-9018eac1689c",
+    "email_id": "email_195",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_195",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_195",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T13:58:36.381686+00:00",
+    "updated_at": "2026-09-20T13:58:36.381686+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "66a0cbcb-9ab3-4a47-b822-490edb460fe3",
+    "email_id": "email_198",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_value",
+    "message": "Missing or unusable value in: shipper, consignee, notify_party, port_of_loading, port_of_discharge, container_count, gross_weight_kg",
+    "original_extraction_payload": {
+      "email_id": "email_198",
+      "SI": {
+        "document_type": "SI",
+        "shipper": null,
+        "consignee": null,
+        "notify_party": null,
+        "port_of_loading": null,
+        "port_of_discharge": null,
+        "container_count": null,
+        "gross_weight_kg": null
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": null,
+        "consignee": null,
+        "notify_party": null,
+        "port_of_loading": null,
+        "port_of_discharge": null,
+        "container_count": null,
+        "gross_weight_kg": null
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_198",
+      "SI": {
+        "document_type": "SI",
+        "shipper": null,
+        "consignee": null,
+        "notify_party": null,
+        "port_of_loading": null,
+        "port_of_discharge": null,
+        "container_count": null,
+        "gross_weight_kg": null
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": null,
+        "consignee": null,
+        "notify_party": null,
+        "port_of_loading": null,
+        "port_of_discharge": null,
+        "container_count": null,
+        "gross_weight_kg": null
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": null,
+        "BL": null,
+        "normalized_SI": null,
+        "normalized_BL": null
+      },
+      "consignee": {
+        "SI": null,
+        "BL": null,
+        "normalized_SI": null,
+        "normalized_BL": null
+      },
+      "notify_party": {
+        "SI": null,
+        "BL": null,
+        "normalized_SI": null,
+        "normalized_BL": null
+      },
+      "port_of_loading": {
+        "SI": null,
+        "BL": null,
+        "normalized_SI": null,
+        "normalized_BL": null
+      },
+      "port_of_discharge": {
+        "SI": null,
+        "BL": null,
+        "normalized_SI": null,
+        "normalized_BL": null
+      },
+      "container_count": {
+        "SI": null,
+        "BL": null,
+        "normalized_SI": null,
+        "normalized_BL": null
+      },
+      "gross_weight_kg": {
+        "SI": null,
+        "BL": null,
+        "normalized_SI": null,
+        "normalized_BL": null
+      }
+    },
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T13:59:01.060403+00:00",
+    "updated_at": "2026-09-20T13:59:01.060403+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "e913086d-a6a4-4736-8a5e-cb07988b99c8",
+    "email_id": "email_199",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_199",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_199",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:00:12.628834+00:00",
+    "updated_at": "2026-09-20T14:00:12.628834+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "2db1e376-5a17-4f22-9fbe-b7cbfcaed89a",
+    "email_id": "email_207",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_207",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_207",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:01:16.930084+00:00",
+    "updated_at": "2026-09-20T14:01:16.930084+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "f508a978-e89b-4d3a-8700-6baab6dd9b1a",
+    "email_id": "email_210",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_210",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_210",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:03:10.250404+00:00",
+    "updated_at": "2026-09-20T14:03:10.250404+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "711cb8b3-2e23-4eca-afc6-258c1cef29bf",
+    "email_id": "email_220",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_220",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_220",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:04:08.815730+00:00",
+    "updated_at": "2026-09-20T14:04:08.815730+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "c583418f-0c97-46d2-a44a-38d3e2b949eb",
+    "email_id": "email_223",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_223",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_223",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:04:45.137348+00:00",
+    "updated_at": "2026-09-20T14:04:45.137348+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "8cede880-092b-4257-bc50-5c2becd668e7",
+    "email_id": "email_225",
+    "review_status": "PENDING",
+    "initial_status": "MISMATCH",
+    "review_reason": null,
+    "message": "Mismatch found in: consignee",
+    "original_extraction_payload": {
+      "email_id": "email_225",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "consignee": "ROXCEL TRADING GMBH",
+        "notify_party": "TOAN LUC PAPER JOINT STOCK COMPANY",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "port_of_discharge": "GDANSK, POLAND (PLGDN)",
+        "container_count": 1,
+        "gross_weight_kg": 22596.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "consignee": "AL GURG STATIONERY LLC",
+        "notify_party": "TOAN LUC PAPER JOINT STOCK COMPANY",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "port_of_discharge": "GDANSK, POLAND (PLGDN)",
+        "container_count": 1,
+        "gross_weight_kg": 22596.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_225",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "consignee": "ROXCEL TRADING GMBH",
+        "notify_party": "TOAN LUC PAPER JOINT STOCK COMPANY",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "port_of_discharge": "GDANSK, POLAND (PLGDN)",
+        "container_count": 1,
+        "gross_weight_kg": 22596.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "consignee": "AL GURG STATIONERY LLC",
+        "notify_party": "TOAN LUC PAPER JOINT STOCK COMPANY",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "port_of_discharge": "GDANSK, POLAND (PLGDN)",
+        "container_count": 1,
+        "gross_weight_kg": 22596.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "BL": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "normalized_SI": "asia pacific paperboard trading pte ltd",
+        "normalized_BL": "asia pacific paperboard trading pte ltd"
+      },
+      "consignee": {
+        "SI": "ROXCEL TRADING GMBH",
+        "BL": "AL GURG STATIONERY LLC",
+        "normalized_SI": "roxcel trading gmbh",
+        "normalized_BL": "al gurg stationery llc"
+      },
+      "notify_party": {
+        "SI": "TOAN LUC PAPER JOINT STOCK COMPANY",
+        "BL": "TOAN LUC PAPER JOINT STOCK COMPANY",
+        "normalized_SI": "toan luc paper joint stock company",
+        "normalized_BL": "toan luc paper joint stock company"
+      },
+      "port_of_loading": {
+        "SI": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "BL": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "normalized_SI": "port klang (westport), malaysia (mypkg)",
+        "normalized_BL": "port klang (westport), malaysia (mypkg)"
+      },
+      "port_of_discharge": {
+        "SI": "GDANSK, POLAND (PLGDN)",
+        "BL": "GDANSK, POLAND (PLGDN)",
+        "normalized_SI": "gdansk, poland (plgdn)",
+        "normalized_BL": "gdansk, poland (plgdn)"
+      },
+      "container_count": {
+        "SI": 1,
+        "BL": 1,
+        "normalized_SI": 1,
+        "normalized_BL": 1
+      },
+      "gross_weight_kg": {
+        "SI": 22596.0,
+        "BL": 22596.0,
+        "normalized_SI": 22596.0,
+        "normalized_BL": 22596.0
+      }
+    },
+    "initial_defect_fields": [
+      "consignee"
+    ],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:04:50.438803+00:00",
+    "updated_at": "2026-09-20T14:04:50.438803+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "e89a9f87-6865-4bf8-a415-8132ad817cc4",
+    "email_id": "email_229",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_229",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_229",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:06:25.951170+00:00",
+    "updated_at": "2026-09-20T14:06:25.951170+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "37e5f9bb-e038-4e8f-8cb2-7745bf9433a4",
+    "email_id": "email_237",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_237",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_237",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:06:47.867377+00:00",
+    "updated_at": "2026-09-20T14:06:47.867377+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "962a5182-407a-4c20-9ade-c494999591e9",
+    "email_id": "email_238",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_238",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_238",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:06:57.354191+00:00",
+    "updated_at": "2026-09-20T14:06:57.354191+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "aa6092b1-7804-4bf6-9ccc-3e8e2ee96f7b",
+    "email_id": "email_242",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_242",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_242",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:08:19.819265+00:00",
+    "updated_at": "2026-09-20T14:08:19.819265+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "1a1cd9ad-f900-42c2-8c61-005b765a9a82",
+    "email_id": "email_243",
+    "review_status": "PENDING",
+    "initial_status": "MISMATCH",
+    "review_reason": null,
+    "message": "Mismatch found in: port_of_loading, port_of_discharge",
+    "original_extraction_payload": {
+      "email_id": "email_243",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "consignee": "SAFQA LIMITED",
+        "notify_party": "SAFQA LIMITED",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA",
+        "port_of_discharge": "HOUSTON, US",
+        "container_count": 5,
+        "gross_weight_kg": 100445.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "consignee": "SAFQA LIMITED",
+        "notify_party": "SAFQA LIMITED",
+        "port_of_loading": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "port_of_discharge": "MOMBASA, KENYA",
+        "container_count": 5,
+        "gross_weight_kg": 100445.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_243",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "consignee": "SAFQA LIMITED",
+        "notify_party": "SAFQA LIMITED",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA",
+        "port_of_discharge": "HOUSTON, US",
+        "container_count": 5,
+        "gross_weight_kg": 100445.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "consignee": "SAFQA LIMITED",
+        "notify_party": "SAFQA LIMITED",
+        "port_of_loading": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "port_of_discharge": "MOMBASA, KENYA",
+        "container_count": 5,
+        "gross_weight_kg": 100445.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "BL": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "normalized_SI": "asia pacific paperboard trading pte ltd",
+        "normalized_BL": "asia pacific paperboard trading pte ltd"
+      },
+      "consignee": {
+        "SI": "SAFQA LIMITED",
+        "BL": "SAFQA LIMITED",
+        "normalized_SI": "safqa limited",
+        "normalized_BL": "safqa limited"
+      },
+      "notify_party": {
+        "SI": "SAFQA LIMITED",
+        "BL": "SAFQA LIMITED",
+        "normalized_SI": "safqa limited",
+        "normalized_BL": "safqa limited"
+      },
+      "port_of_loading": {
+        "SI": "PORT KLANG (WESTPORT), MALAYSIA",
+        "BL": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "normalized_SI": "port klang (westport), malaysia",
+        "normalized_BL": "rugao/nantong/shanghai, china"
+      },
+      "port_of_discharge": {
+        "SI": "HOUSTON, US",
+        "BL": "MOMBASA, KENYA",
+        "normalized_SI": "houston, us",
+        "normalized_BL": "mombasa, kenya"
+      },
+      "container_count": {
+        "SI": 5,
+        "BL": 5,
+        "normalized_SI": 5,
+        "normalized_BL": 5
+      },
+      "gross_weight_kg": {
+        "SI": 100445.0,
+        "BL": 100445.0,
+        "normalized_SI": 100445.0,
+        "normalized_BL": 100445.0
+      }
+    },
+    "initial_defect_fields": [
+      "port_of_loading",
+      "port_of_discharge"
+    ],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:08:25.986547+00:00",
+    "updated_at": "2026-09-20T14:08:25.986547+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "a7e8ff03-6f40-47c6-9962-71f01d9d73b8",
+    "email_id": "email_247",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_247",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_247",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:08:34.499657+00:00",
+    "updated_at": "2026-09-20T14:08:34.499657+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "15f719b9-dcfb-4f4c-9ad4-bddbf89d6795",
+    "email_id": "email_250",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_250",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_250",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:08:48.131156+00:00",
+    "updated_at": "2026-09-20T14:08:48.131156+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "7a342ae7-f25a-485e-b310-3ff2755851d8",
+    "email_id": "email_255",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_255",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_255",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:10:05.062551+00:00",
+    "updated_at": "2026-09-20T14:10:05.062551+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "cab80593-8716-4fab-8344-7f050de0edc1",
+    "email_id": "email_256",
+    "review_status": "PENDING",
+    "initial_status": "MISMATCH",
+    "review_reason": null,
+    "message": "Mismatch found in: shipper, port_of_discharge",
+    "original_extraction_payload": {
+      "email_id": "email_256",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FINE PAPER TRADING",
+        "consignee": "SAFQA LIMITED",
+        "notify_party": "HABRAS INTERNATIONAL LIMITED",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "port_of_discharge": "VALPARAISO, CHILE (CLVAP)",
+        "container_count": 12,
+        "gross_weight_kg": 262224.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "SAFQA LIMITED",
+        "notify_party": "HABRAS INTERNATIONAL LIMITED",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "port_of_discharge": "FREMANTLE, AUSTRALIA (CLVAP)",
+        "container_count": 12,
+        "gross_weight_kg": 262224.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_256",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FINE PAPER TRADING",
+        "consignee": "SAFQA LIMITED",
+        "notify_party": "HABRAS INTERNATIONAL LIMITED",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "port_of_discharge": "VALPARAISO, CHILE (CLVAP)",
+        "container_count": 12,
+        "gross_weight_kg": 262224.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "SAFQA LIMITED",
+        "notify_party": "HABRAS INTERNATIONAL LIMITED",
+        "port_of_loading": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "port_of_discharge": "FREMANTLE, AUSTRALIA (CLVAP)",
+        "container_count": 12,
+        "gross_weight_kg": 262224.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "APRIL FINE PAPER TRADING",
+        "BL": "APRIL FAR EAST (M) SDN BHD",
+        "normalized_SI": "april fine paper trading",
+        "normalized_BL": "april far east (m) sdn bhd"
+      },
+      "consignee": {
+        "SI": "SAFQA LIMITED",
+        "BL": "SAFQA LIMITED",
+        "normalized_SI": "safqa limited",
+        "normalized_BL": "safqa limited"
+      },
+      "notify_party": {
+        "SI": "HABRAS INTERNATIONAL LIMITED",
+        "BL": "HABRAS INTERNATIONAL LIMITED",
+        "normalized_SI": "habras international limited",
+        "normalized_BL": "habras international limited"
+      },
+      "port_of_loading": {
+        "SI": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "BL": "PORT KLANG (WESTPORT), MALAYSIA (MYPKG)",
+        "normalized_SI": "port klang (westport), malaysia (mypkg)",
+        "normalized_BL": "port klang (westport), malaysia (mypkg)"
+      },
+      "port_of_discharge": {
+        "SI": "VALPARAISO, CHILE (CLVAP)",
+        "BL": "FREMANTLE, AUSTRALIA (CLVAP)",
+        "normalized_SI": "valparaiso, chile (clvap)",
+        "normalized_BL": "fremantle, australia (clvap)"
+      },
+      "container_count": {
+        "SI": 12,
+        "BL": 12,
+        "normalized_SI": 12,
+        "normalized_BL": 12
+      },
+      "gross_weight_kg": {
+        "SI": 262224.0,
+        "BL": 262224.0,
+        "normalized_SI": 262224.0,
+        "normalized_BL": 262224.0
+      }
+    },
+    "initial_defect_fields": [
+      "shipper",
+      "port_of_discharge"
+    ],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:10:09.652121+00:00",
+    "updated_at": "2026-09-20T14:10:09.652121+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "36cc386e-59a0-4c79-bc5e-139dd30aa603",
+    "email_id": "email_259",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_259",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_259",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:10:13.068307+00:00",
+    "updated_at": "2026-09-20T14:10:13.068307+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "52377ea8-ecbb-4f80-b1b8-e39ff2f37ee8",
+    "email_id": "email_261",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_261",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_261",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:10:17.286548+00:00",
+    "updated_at": "2026-09-20T14:10:17.286548+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "6f6d833f-6db1-44c6-b76a-f0f2c776b367",
+    "email_id": "email_263",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_263",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_263",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:10:21.457523+00:00",
+    "updated_at": "2026-09-20T14:10:21.457523+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "b7fd080d-462e-4b8d-a688-8ead72791ac5",
+    "email_id": "email_265",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_265",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_265",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:10:23.938993+00:00",
+    "updated_at": "2026-09-20T14:10:23.938993+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "fdc1e276-e416-4b65-a09c-be1b63b0c014",
+    "email_id": "email_270",
+    "review_status": "PENDING",
+    "initial_status": "MISMATCH",
+    "review_reason": null,
+    "message": "Mismatch found in: port_of_discharge",
+    "original_extraction_payload": {
+      "email_id": "email_270",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "notify_party": "3S PAPER PRODUCTS SDN BHD",
+        "port_of_loading": "SINGAPORE (SGSIN)",
+        "port_of_discharge": "MERSIN, TURKEY (TRMER)",
+        "container_count": 6,
+        "gross_weight_kg": 139536.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "notify_party": "3S PAPER PRODUCTS SDN BHD",
+        "port_of_loading": "SINGAPORE (SGSIN)",
+        "port_of_discharge": "LONG BEACH, US (TRMER)",
+        "container_count": 6,
+        "gross_weight_kg": 139536.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_270",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "notify_party": "3S PAPER PRODUCTS SDN BHD",
+        "port_of_loading": "SINGAPORE (SGSIN)",
+        "port_of_discharge": "MERSIN, TURKEY (TRMER)",
+        "container_count": 6,
+        "gross_weight_kg": 139536.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "notify_party": "3S PAPER PRODUCTS SDN BHD",
+        "port_of_loading": "SINGAPORE (SGSIN)",
+        "port_of_discharge": "LONG BEACH, US (TRMER)",
+        "container_count": 6,
+        "gross_weight_kg": 139536.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "APRIL FAR EAST (M) SDN BHD",
+        "BL": "APRIL FAR EAST (M) SDN BHD",
+        "normalized_SI": "april far east (m) sdn bhd",
+        "normalized_BL": "april far east (m) sdn bhd"
+      },
+      "consignee": {
+        "SI": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "BL": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "normalized_SI": "kpp-antalis (singapore) pte. ltd.",
+        "normalized_BL": "kpp-antalis (singapore) pte. ltd."
+      },
+      "notify_party": {
+        "SI": "3S PAPER PRODUCTS SDN BHD",
+        "BL": "3S PAPER PRODUCTS SDN BHD",
+        "normalized_SI": "3s paper products sdn bhd",
+        "normalized_BL": "3s paper products sdn bhd"
+      },
+      "port_of_loading": {
+        "SI": "SINGAPORE (SGSIN)",
+        "BL": "SINGAPORE (SGSIN)",
+        "normalized_SI": "singapore (sgsin)",
+        "normalized_BL": "singapore (sgsin)"
+      },
+      "port_of_discharge": {
+        "SI": "MERSIN, TURKEY (TRMER)",
+        "BL": "LONG BEACH, US (TRMER)",
+        "normalized_SI": "mersin, turkey (trmer)",
+        "normalized_BL": "long beach, us (trmer)"
+      },
+      "container_count": {
+        "SI": 6,
+        "BL": 6,
+        "normalized_SI": 6,
+        "normalized_BL": 6
+      },
+      "gross_weight_kg": {
+        "SI": 139536.0,
+        "BL": 139536.0,
+        "normalized_SI": 139536.0,
+        "normalized_BL": 139536.0
+      }
+    },
+    "initial_defect_fields": [
+      "port_of_discharge"
+    ],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:10:33.918770+00:00",
+    "updated_at": "2026-09-20T14:10:33.918770+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "1977be2e-bf98-466f-a0ff-091698c08356",
+    "email_id": "email_271",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_271",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_271",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:10:35.089323+00:00",
+    "updated_at": "2026-09-20T14:10:35.089323+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "2a1eae34-825d-47eb-a843-b1fdd116d432",
+    "email_id": "email_281",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_281",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_281",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:13:57.282608+00:00",
+    "updated_at": "2026-09-20T14:13:57.282608+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "3d11ecfb-8fb0-466d-83a8-7d400cc28b04",
+    "email_id": "email_282",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_282",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_282",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:14:12.818186+00:00",
+    "updated_at": "2026-09-20T14:14:12.818186+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "2aac3bb0-f276-4612-99a9-90c84f4f5552",
+    "email_id": "email_288",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_288",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_288",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:14:20.389341+00:00",
+    "updated_at": "2026-09-20T14:14:20.389341+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "1ca932eb-19cd-4cfe-93aa-ce5f851024e0",
+    "email_id": "email_290",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_290",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_290",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:14:23.687758+00:00",
+    "updated_at": "2026-09-20T14:14:23.687758+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "54c6c76d-f346-4c73-a5fd-180019cc12a8",
+    "email_id": "email_291",
+    "review_status": "PENDING",
+    "initial_status": "MISMATCH",
+    "review_reason": null,
+    "message": "Mismatch found in: consignee, container_count",
+    "original_extraction_payload": {
+      "email_id": "email_291",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "consignee": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "notify_party": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "port_of_loading": "NANTONG, CHINA",
+        "port_of_discharge": "SAVANNAH, US",
+        "container_count": 1,
+        "gross_weight_kg": 21745.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "consignee": "TOPKOPY MIDDLE EAST FZE",
+        "notify_party": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "port_of_loading": "NANTONG, CHINA",
+        "port_of_discharge": "SAVANNAH, US",
+        "container_count": 3,
+        "gross_weight_kg": 21745.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_291",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "consignee": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "notify_party": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "port_of_loading": "NANTONG, CHINA",
+        "port_of_discharge": "SAVANNAH, US",
+        "container_count": 1,
+        "gross_weight_kg": 21745.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "consignee": "TOPKOPY MIDDLE EAST FZE",
+        "notify_party": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "port_of_loading": "NANTONG, CHINA",
+        "port_of_discharge": "SAVANNAH, US",
+        "container_count": 3,
+        "gross_weight_kg": 21745.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "BL": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "normalized_SI": "april fine paper trading (middle east) fze",
+        "normalized_BL": "april fine paper trading (middle east) fze"
+      },
+      "consignee": {
+        "SI": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "BL": "TOPKOPY MIDDLE EAST FZE",
+        "normalized_SI": "international forest products llc",
+        "normalized_BL": "topkopy middle east fze"
+      },
+      "notify_party": {
+        "SI": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "BL": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "normalized_SI": "international forest products llc",
+        "normalized_BL": "international forest products llc"
+      },
+      "port_of_loading": {
+        "SI": "NANTONG, CHINA",
+        "BL": "NANTONG, CHINA",
+        "normalized_SI": "nantong, china",
+        "normalized_BL": "nantong, china"
+      },
+      "port_of_discharge": {
+        "SI": "SAVANNAH, US",
+        "BL": "SAVANNAH, US",
+        "normalized_SI": "savannah, us",
+        "normalized_BL": "savannah, us"
+      },
+      "container_count": {
+        "SI": 1,
+        "BL": 3,
+        "normalized_SI": 1,
+        "normalized_BL": 3
+      },
+      "gross_weight_kg": {
+        "SI": 21745.0,
+        "BL": 21745.0,
+        "normalized_SI": 21745.0,
+        "normalized_BL": 21745.0
+      }
+    },
+    "initial_defect_fields": [
+      "consignee",
+      "container_count"
+    ],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:14:28.211239+00:00",
+    "updated_at": "2026-09-20T14:14:28.211239+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "b519e3c5-b30d-4896-b3eb-c94520e8cc8c",
+    "email_id": "email_292",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_292",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_292",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:14:29.731839+00:00",
+    "updated_at": "2026-09-20T14:14:29.731839+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "ce2dd73a-9ee6-458f-b848-8ec9351efbb3",
+    "email_id": "email_294",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_294",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_294",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:14:40.177452+00:00",
+    "updated_at": "2026-09-20T14:14:40.177452+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "caeb2c67-746f-425f-aa83-cb3a69c71fe3",
+    "email_id": "email_299",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_299",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_299",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:16:28.078582+00:00",
+    "updated_at": "2026-09-20T14:16:28.078582+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "5a52c2b0-3e54-4a64-a88f-046e72d70441",
+    "email_id": "email_300",
+    "review_status": "PENDING",
+    "initial_status": "MISMATCH",
+    "review_reason": null,
+    "message": "Mismatch found in: shipper, notify_party",
+    "original_extraction_payload": {
+      "email_id": "email_300",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "SAFQA LIMITED",
+        "notify_party": "UAB NOVAKOPA",
+        "port_of_loading": "NANTONG, CHINA",
+        "port_of_discharge": "VALPARAISO, CHILE",
+        "container_count": 12,
+        "gross_weight_kg": 243168.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "consignee": "SAFQA LIMITED",
+        "notify_party": "NAGAPPA EXPORTS",
+        "port_of_loading": "NANTONG, CHINA",
+        "port_of_discharge": "VALPARAISO, CHILE",
+        "container_count": 12,
+        "gross_weight_kg": 243168.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_300",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "SAFQA LIMITED",
+        "notify_party": "UAB NOVAKOPA",
+        "port_of_loading": "NANTONG, CHINA",
+        "port_of_discharge": "VALPARAISO, CHILE",
+        "container_count": 12,
+        "gross_weight_kg": 243168.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "consignee": "SAFQA LIMITED",
+        "notify_party": "NAGAPPA EXPORTS",
+        "port_of_loading": "NANTONG, CHINA",
+        "port_of_discharge": "VALPARAISO, CHILE",
+        "container_count": 12,
+        "gross_weight_kg": 243168.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "APRIL FAR EAST (M) SDN BHD",
+        "BL": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "normalized_SI": "april far east (m) sdn bhd",
+        "normalized_BL": "april fine paper trading (middle east) fze"
+      },
+      "consignee": {
+        "SI": "SAFQA LIMITED",
+        "BL": "SAFQA LIMITED",
+        "normalized_SI": "safqa limited",
+        "normalized_BL": "safqa limited"
+      },
+      "notify_party": {
+        "SI": "UAB NOVAKOPA",
+        "BL": "NAGAPPA EXPORTS",
+        "normalized_SI": "uab novakopa",
+        "normalized_BL": "nagappa exports"
+      },
+      "port_of_loading": {
+        "SI": "NANTONG, CHINA",
+        "BL": "NANTONG, CHINA",
+        "normalized_SI": "nantong, china",
+        "normalized_BL": "nantong, china"
+      },
+      "port_of_discharge": {
+        "SI": "VALPARAISO, CHILE",
+        "BL": "VALPARAISO, CHILE",
+        "normalized_SI": "valparaiso, chile",
+        "normalized_BL": "valparaiso, chile"
+      },
+      "container_count": {
+        "SI": 12,
+        "BL": 12,
+        "normalized_SI": 12,
+        "normalized_BL": 12
+      },
+      "gross_weight_kg": {
+        "SI": 243168.0,
+        "BL": 243168.0,
+        "normalized_SI": 243168.0,
+        "normalized_BL": 243168.0
+      }
+    },
+    "initial_defect_fields": [
+      "shipper",
+      "notify_party"
+    ],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:16:53.669063+00:00",
+    "updated_at": "2026-09-20T14:16:53.669063+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "70830492-b472-4306-b2cd-088af8b1ed13",
+    "email_id": "email_301",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_301",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_301",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:17:27.101565+00:00",
+    "updated_at": "2026-09-20T14:17:27.101565+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "2e4d43af-457b-4510-8b14-71dfb4918962",
+    "email_id": "email_302",
+    "review_status": "PENDING",
+    "initial_status": "MISMATCH",
+    "review_reason": null,
+    "message": "Mismatch found in: container_count",
+    "original_extraction_payload": {
+      "email_id": "email_302",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "consignee": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "notify_party": "KTP CO., LTD",
+        "port_of_loading": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "port_of_discharge": "BRISBANE, AUSTRALIA",
+        "container_count": 2,
+        "gross_weight_kg": 40176.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "consignee": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "notify_party": "KTP CO., LTD",
+        "port_of_loading": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "port_of_discharge": "BRISBANE, AUSTRALIA",
+        "container_count": 4,
+        "gross_weight_kg": 40176.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_302",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "consignee": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "notify_party": "KTP CO., LTD",
+        "port_of_loading": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "port_of_discharge": "BRISBANE, AUSTRALIA",
+        "container_count": 2,
+        "gross_weight_kg": 40176.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "consignee": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "notify_party": "KTP CO., LTD",
+        "port_of_loading": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "port_of_discharge": "BRISBANE, AUSTRALIA",
+        "container_count": 4,
+        "gross_weight_kg": 40176.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "BL": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "normalized_SI": "april fine paper trading (middle east) fze",
+        "normalized_BL": "april fine paper trading (middle east) fze"
+      },
+      "consignee": {
+        "SI": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "BL": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "normalized_SI": "international forest products llc",
+        "normalized_BL": "international forest products llc"
+      },
+      "notify_party": {
+        "SI": "KTP CO., LTD",
+        "BL": "KTP CO., LTD",
+        "normalized_SI": "ktp co., ltd",
+        "normalized_BL": "ktp co., ltd"
+      },
+      "port_of_loading": {
+        "SI": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "BL": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "normalized_SI": "rugao/nantong/shanghai, china",
+        "normalized_BL": "rugao/nantong/shanghai, china"
+      },
+      "port_of_discharge": {
+        "SI": "BRISBANE, AUSTRALIA",
+        "BL": "BRISBANE, AUSTRALIA",
+        "normalized_SI": "brisbane, australia",
+        "normalized_BL": "brisbane, australia"
+      },
+      "container_count": {
+        "SI": 2,
+        "BL": 4,
+        "normalized_SI": 2,
+        "normalized_BL": 4
+      },
+      "gross_weight_kg": {
+        "SI": 40176.0,
+        "BL": 40176.0,
+        "normalized_SI": 40176.0,
+        "normalized_BL": 40176.0
+      }
+    },
+    "initial_defect_fields": [
+      "container_count"
+    ],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:18:12.964425+00:00",
+    "updated_at": "2026-09-20T14:18:12.964425+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "12a5954d-0fc7-4414-a85e-9667be7fd89c",
+    "email_id": "email_305",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_305",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_305",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:18:17.173980+00:00",
+    "updated_at": "2026-09-20T14:18:17.173980+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "460904e8-05e8-45cb-a739-d28765218a7a",
+    "email_id": "email_309",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_309",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_309",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:18:52.812210+00:00",
+    "updated_at": "2026-09-20T14:18:52.812210+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "5b21ef43-ef61-4f4e-98ea-2e4041800cbd",
+    "email_id": "email_312",
+    "review_status": "PENDING",
+    "initial_status": "MISMATCH",
+    "review_reason": null,
+    "message": "Mismatch found in: shipper, notify_party",
+    "original_extraction_payload": {
+      "email_id": "email_312",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "consignee": "3S PAPER PRODUCTS SDN BHD",
+        "notify_party": "3S PAPER PRODUCTS SDN BHD",
+        "port_of_loading": "NANTONG, CHINA (CNNTG)",
+        "port_of_discharge": "BRISBANE, AUSTRALIA (AUBNE)",
+        "container_count": 10,
+        "gross_weight_kg": 237010.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "3S PAPER PRODUCTS SDN BHD",
+        "notify_party": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "port_of_loading": "NANTONG, CHINA (CNNTG)",
+        "port_of_discharge": "BRISBANE, AUSTRALIA (AUBNE)",
+        "container_count": 10,
+        "gross_weight_kg": 237010.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_312",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "consignee": "3S PAPER PRODUCTS SDN BHD",
+        "notify_party": "3S PAPER PRODUCTS SDN BHD",
+        "port_of_loading": "NANTONG, CHINA (CNNTG)",
+        "port_of_discharge": "BRISBANE, AUSTRALIA (AUBNE)",
+        "container_count": 10,
+        "gross_weight_kg": 237010.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "3S PAPER PRODUCTS SDN BHD",
+        "notify_party": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "port_of_loading": "NANTONG, CHINA (CNNTG)",
+        "port_of_discharge": "BRISBANE, AUSTRALIA (AUBNE)",
+        "container_count": 10,
+        "gross_weight_kg": 237010.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "APRIL FINE PAPER TRADING (MIDDLE EAST) FZE",
+        "BL": "APRIL FAR EAST (M) SDN BHD",
+        "normalized_SI": "april fine paper trading (middle east) fze",
+        "normalized_BL": "april far east (m) sdn bhd"
+      },
+      "consignee": {
+        "SI": "3S PAPER PRODUCTS SDN BHD",
+        "BL": "3S PAPER PRODUCTS SDN BHD",
+        "normalized_SI": "3s paper products sdn bhd",
+        "normalized_BL": "3s paper products sdn bhd"
+      },
+      "notify_party": {
+        "SI": "3S PAPER PRODUCTS SDN BHD",
+        "BL": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "normalized_SI": "3s paper products sdn bhd",
+        "normalized_BL": "kpp-antalis (singapore) pte. ltd."
+      },
+      "port_of_loading": {
+        "SI": "NANTONG, CHINA (CNNTG)",
+        "BL": "NANTONG, CHINA (CNNTG)",
+        "normalized_SI": "nantong, china (cnntg)",
+        "normalized_BL": "nantong, china (cnntg)"
+      },
+      "port_of_discharge": {
+        "SI": "BRISBANE, AUSTRALIA (AUBNE)",
+        "BL": "BRISBANE, AUSTRALIA (AUBNE)",
+        "normalized_SI": "brisbane, australia (aubne)",
+        "normalized_BL": "brisbane, australia (aubne)"
+      },
+      "container_count": {
+        "SI": 10,
+        "BL": 10,
+        "normalized_SI": 10,
+        "normalized_BL": 10
+      },
+      "gross_weight_kg": {
+        "SI": 237010.0,
+        "BL": 237010.0,
+        "normalized_SI": 237010.0,
+        "normalized_BL": 237010.0
+      }
+    },
+    "initial_defect_fields": [
+      "shipper",
+      "notify_party"
+    ],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:19:02.507700+00:00",
+    "updated_at": "2026-09-20T14:19:02.507700+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "ce41d612-f04e-4d20-9316-586517bb1744",
+    "email_id": "email_313",
+    "review_status": "PENDING",
+    "initial_status": "MISMATCH",
+    "review_reason": null,
+    "message": "Mismatch found in: container_count, gross_weight_kg",
+    "original_extraction_payload": {
+      "email_id": "email_313",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FINE PAPER TRADING ON BEHALF OF VITAL SOLUTIONS PTE LTD",
+        "consignee": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "notify_party": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "port_of_loading": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "port_of_discharge": "HOCHIMINH CITY, VIETNAM",
+        "container_count": 5,
+        "gross_weight_kg": 118270.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FINE PAPER TRADING ON BEHALF OF VITAL SOLUTIONS PTE LTD",
+        "consignee": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "notify_party": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "port_of_loading": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "port_of_discharge": "HOCHIMINH CITY, VIETNAM",
+        "container_count": 4,
+        "gross_weight_kg": 117770.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_313",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "APRIL FINE PAPER TRADING ON BEHALF OF VITAL SOLUTIONS PTE LTD",
+        "consignee": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "notify_party": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "port_of_loading": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "port_of_discharge": "HOCHIMINH CITY, VIETNAM",
+        "container_count": 5,
+        "gross_weight_kg": 118270.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FINE PAPER TRADING ON BEHALF OF VITAL SOLUTIONS PTE LTD",
+        "consignee": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "notify_party": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "port_of_loading": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "port_of_discharge": "HOCHIMINH CITY, VIETNAM",
+        "container_count": 4,
+        "gross_weight_kg": 117770.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "APRIL FINE PAPER TRADING ON BEHALF OF VITAL SOLUTIONS PTE LTD",
+        "BL": "APRIL FINE PAPER TRADING ON BEHALF OF VITAL SOLUTIONS PTE LTD",
+        "normalized_SI": "april fine paper trading on behalf of vital solutions pte ltd",
+        "normalized_BL": "april fine paper trading on behalf of vital solutions pte ltd"
+      },
+      "consignee": {
+        "SI": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "BL": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "normalized_SI": "kpp-antalis (singapore) pte. ltd.",
+        "normalized_BL": "kpp-antalis (singapore) pte. ltd."
+      },
+      "notify_party": {
+        "SI": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "BL": "KPP-ANTALIS (SINGAPORE) PTE. LTD.",
+        "normalized_SI": "kpp-antalis (singapore) pte. ltd.",
+        "normalized_BL": "kpp-antalis (singapore) pte. ltd."
+      },
+      "port_of_loading": {
+        "SI": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "BL": "RUGAO/NANTONG/SHANGHAI, CHINA",
+        "normalized_SI": "rugao/nantong/shanghai, china",
+        "normalized_BL": "rugao/nantong/shanghai, china"
+      },
+      "port_of_discharge": {
+        "SI": "HOCHIMINH CITY, VIETNAM",
+        "BL": "HOCHIMINH CITY, VIETNAM",
+        "normalized_SI": "hochiminh city, vietnam",
+        "normalized_BL": "hochiminh city, vietnam"
+      },
+      "container_count": {
+        "SI": 5,
+        "BL": 4,
+        "normalized_SI": 5,
+        "normalized_BL": 4
+      },
+      "gross_weight_kg": {
+        "SI": 118270.0,
+        "BL": 117770.0,
+        "normalized_SI": 118270.0,
+        "normalized_BL": 117770.0
+      }
+    },
+    "initial_defect_fields": [
+      "container_count",
+      "gross_weight_kg"
+    ],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:19:07.946955+00:00",
+    "updated_at": "2026-09-20T14:19:07.946955+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "8bf01e55-27b1-49d1-b80f-de171bcdd6e5",
+    "email_id": "email_318",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_318",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_318",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:21:15.981363+00:00",
+    "updated_at": "2026-09-20T14:21:15.981363+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "4e1c7129-2300-4a60-988c-d806ea433218",
+    "email_id": "email_319",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_319",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_319",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:21:17.795504+00:00",
+    "updated_at": "2026-09-20T14:21:17.795504+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "bc6e7de9-1bab-4e61-90d6-a42c4c958861",
+    "email_id": "email_321",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_321",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_321",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:21:40.634538+00:00",
+    "updated_at": "2026-09-20T14:21:40.634538+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "ca7397b5-2bda-40d0-9faa-a17dbbdccd4e",
+    "email_id": "email_324",
+    "review_status": "PENDING",
+    "initial_status": "MISMATCH",
+    "review_reason": null,
+    "message": "Mismatch found in: shipper, port_of_loading, port_of_discharge, container_count",
+    "original_extraction_payload": {
+      "email_id": "email_324",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "consignee": "CLIFFORD PAPER INC",
+        "notify_party": "CLIFFORD PAPER INC",
+        "port_of_loading": "BUATAN, INDONESIA",
+        "port_of_discharge": "NEW YORK, US",
+        "container_count": 3,
+        "gross_weight_kg": 60258.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "CLIFFORD PAPER INC",
+        "notify_party": "CLIFFORD PAPER INC",
+        "port_of_loading": "BUATAN, INDONESIA (IDBUA)",
+        "port_of_discharge": "NEW YORK, US (USNYC)",
+        "container_count": 4,
+        "gross_weight_kg": 60258.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_324",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "consignee": "CLIFFORD PAPER INC",
+        "notify_party": "CLIFFORD PAPER INC",
+        "port_of_loading": "BUATAN, INDONESIA",
+        "port_of_discharge": "NEW YORK, US",
+        "container_count": 3,
+        "gross_weight_kg": 60258.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FAR EAST (M) SDN BHD",
+        "consignee": "CLIFFORD PAPER INC",
+        "notify_party": "CLIFFORD PAPER INC",
+        "port_of_loading": "BUATAN, INDONESIA (IDBUA)",
+        "port_of_discharge": "NEW YORK, US (USNYC)",
+        "container_count": 4,
+        "gross_weight_kg": 60258.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "BL": "APRIL FAR EAST (M) SDN BHD",
+        "normalized_SI": "asia pacific paperboard trading pte ltd",
+        "normalized_BL": "april far east (m) sdn bhd"
+      },
+      "consignee": {
+        "SI": "CLIFFORD PAPER INC",
+        "BL": "CLIFFORD PAPER INC",
+        "normalized_SI": "clifford paper inc",
+        "normalized_BL": "clifford paper inc"
+      },
+      "notify_party": {
+        "SI": "CLIFFORD PAPER INC",
+        "BL": "CLIFFORD PAPER INC",
+        "normalized_SI": "clifford paper inc",
+        "normalized_BL": "clifford paper inc"
+      },
+      "port_of_loading": {
+        "SI": "BUATAN, INDONESIA",
+        "BL": "BUATAN, INDONESIA (IDBUA)",
+        "normalized_SI": "buatan, indonesia",
+        "normalized_BL": "buatan, indonesia (idbua)"
+      },
+      "port_of_discharge": {
+        "SI": "NEW YORK, US",
+        "BL": "NEW YORK, US (USNYC)",
+        "normalized_SI": "new york, us",
+        "normalized_BL": "new york, us (usnyc)"
+      },
+      "container_count": {
+        "SI": 3,
+        "BL": 4,
+        "normalized_SI": 3,
+        "normalized_BL": 4
+      },
+      "gross_weight_kg": {
+        "SI": 60258.0,
+        "BL": 60258.0,
+        "normalized_SI": 60258.0,
+        "normalized_BL": 60258.0
+      }
+    },
+    "initial_defect_fields": [
+      "shipper",
+      "port_of_loading",
+      "port_of_discharge",
+      "container_count"
+    ],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:22:06.571502+00:00",
+    "updated_at": "2026-09-20T14:22:06.571502+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "4da59e60-4061-4210-97fe-8ec8677dd7c8",
+    "email_id": "email_326",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_326",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_326",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:22:32.786096+00:00",
+    "updated_at": "2026-09-20T14:22:32.786096+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "a96d4522-599c-4521-ad3b-e5d5fa9e4eb6",
+    "email_id": "email_332",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_332",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_332",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:23:46.354447+00:00",
+    "updated_at": "2026-09-20T14:23:46.354447+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "840253ba-9ef2-489b-81e4-d820a9e7ce6f",
+    "email_id": "email_334",
+    "review_status": "PENDING",
+    "initial_status": "MISMATCH",
+    "review_reason": null,
+    "message": "Mismatch found in: shipper, consignee",
+    "original_extraction_payload": {
+      "email_id": "email_334",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "consignee": "EAST BRIGHT FZ-LLC",
+        "notify_party": "EAST BRIGHT FZ-LLC",
+        "port_of_loading": "SINGAPORE (SGSIN)",
+        "port_of_discharge": "YANGON, MYANMAR (MMRGN)",
+        "container_count": 6,
+        "gross_weight_kg": 127692.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FINE PAPER TRADING",
+        "consignee": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "notify_party": "EAST BRIGHT FZ-LLC",
+        "port_of_loading": "SINGAPORE (SGSIN)",
+        "port_of_discharge": "YANGON, MYANMAR (MMRGN)",
+        "container_count": 6,
+        "gross_weight_kg": 127692.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_334",
+      "SI": {
+        "document_type": "SI",
+        "shipper": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "consignee": "EAST BRIGHT FZ-LLC",
+        "notify_party": "EAST BRIGHT FZ-LLC",
+        "port_of_loading": "SINGAPORE (SGSIN)",
+        "port_of_discharge": "YANGON, MYANMAR (MMRGN)",
+        "container_count": 6,
+        "gross_weight_kg": 127692.0
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FINE PAPER TRADING",
+        "consignee": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "notify_party": "EAST BRIGHT FZ-LLC",
+        "port_of_loading": "SINGAPORE (SGSIN)",
+        "port_of_discharge": "YANGON, MYANMAR (MMRGN)",
+        "container_count": 6,
+        "gross_weight_kg": 127692.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": "ASIA PACIFIC PAPERBOARD TRADING PTE LTD",
+        "BL": "APRIL FINE PAPER TRADING",
+        "normalized_SI": "asia pacific paperboard trading pte ltd",
+        "normalized_BL": "april fine paper trading"
+      },
+      "consignee": {
+        "SI": "EAST BRIGHT FZ-LLC",
+        "BL": "INTERNATIONAL FOREST PRODUCTS LLC",
+        "normalized_SI": "east bright fz-llc",
+        "normalized_BL": "international forest products llc"
+      },
+      "notify_party": {
+        "SI": "EAST BRIGHT FZ-LLC",
+        "BL": "EAST BRIGHT FZ-LLC",
+        "normalized_SI": "east bright fz-llc",
+        "normalized_BL": "east bright fz-llc"
+      },
+      "port_of_loading": {
+        "SI": "SINGAPORE (SGSIN)",
+        "BL": "SINGAPORE (SGSIN)",
+        "normalized_SI": "singapore (sgsin)",
+        "normalized_BL": "singapore (sgsin)"
+      },
+      "port_of_discharge": {
+        "SI": "YANGON, MYANMAR (MMRGN)",
+        "BL": "YANGON, MYANMAR (MMRGN)",
+        "normalized_SI": "yangon, myanmar (mmrgn)",
+        "normalized_BL": "yangon, myanmar (mmrgn)"
+      },
+      "container_count": {
+        "SI": 6,
+        "BL": 6,
+        "normalized_SI": 6,
+        "normalized_BL": 6
+      },
+      "gross_weight_kg": {
+        "SI": 127692.0,
+        "BL": 127692.0,
+        "normalized_SI": 127692.0,
+        "normalized_BL": 127692.0
+      }
+    },
+    "initial_defect_fields": [
+      "shipper",
+      "consignee"
+    ],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:23:53.009810+00:00",
+    "updated_at": "2026-09-20T14:23:53.009810+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "ab7c4a0f-015c-48d4-88e1-2bbd1b8d0ae9",
+    "email_id": "email_337",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_337",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_337",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:24:00.874035+00:00",
+    "updated_at": "2026-09-20T14:24:00.874035+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "6ecc430b-d005-4c95-934a-f9f4b9cbf472",
+    "email_id": "email_341",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_341",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_341",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:24:06.382175+00:00",
+    "updated_at": "2026-09-20T14:24:06.382175+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "3fb395c1-2cab-4671-b326-248f37b52f23",
+    "email_id": "email_342",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_value",
+    "message": "Missing or unusable value in: shipper, consignee, notify_party, port_of_loading, port_of_discharge, container_count, gross_weight_kg",
+    "original_extraction_payload": {
+      "email_id": "email_342",
+      "SI": {
+        "document_type": "SI",
+        "shipper": null,
+        "consignee": null,
+        "notify_party": null,
+        "port_of_loading": null,
+        "port_of_discharge": null,
+        "container_count": null,
+        "gross_weight_kg": null
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FINE PAPER TRADING",
+        "consignee": "MOORIM SP CO., LTD",
+        "notify_party": "SAFQA LIMITED",
+        "port_of_loading": "NHAVA SHEVA, INDIA",
+        "port_of_discharge": "AQABA, JORDAN",
+        "container_count": 2,
+        "gross_weight_kg": 23794.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "extraction_payload": {
+      "email_id": "email_342",
+      "SI": {
+        "document_type": "SI",
+        "shipper": null,
+        "consignee": null,
+        "notify_party": null,
+        "port_of_loading": null,
+        "port_of_discharge": null,
+        "container_count": null,
+        "gross_weight_kg": null
+      },
+      "BL": {
+        "document_type": "BL",
+        "shipper": "APRIL FINE PAPER TRADING",
+        "consignee": "MOORIM SP CO., LTD",
+        "notify_party": "SAFQA LIMITED",
+        "port_of_loading": "NHAVA SHEVA, INDIA",
+        "port_of_discharge": "AQABA, JORDAN",
+        "container_count": 2,
+        "gross_weight_kg": 23794.0
+      },
+      "escalation_reason": null,
+      "attachments_present": true
+    },
+    "side_by_side": {
+      "shipper": {
+        "SI": null,
+        "BL": "APRIL FINE PAPER TRADING",
+        "normalized_SI": null,
+        "normalized_BL": "april fine paper trading"
+      },
+      "consignee": {
+        "SI": null,
+        "BL": "MOORIM SP CO., LTD",
+        "normalized_SI": null,
+        "normalized_BL": "moorim sp co., ltd"
+      },
+      "notify_party": {
+        "SI": null,
+        "BL": "SAFQA LIMITED",
+        "normalized_SI": null,
+        "normalized_BL": "safqa limited"
+      },
+      "port_of_loading": {
+        "SI": null,
+        "BL": "NHAVA SHEVA, INDIA",
+        "normalized_SI": null,
+        "normalized_BL": "nhava sheva, india"
+      },
+      "port_of_discharge": {
+        "SI": null,
+        "BL": "AQABA, JORDAN",
+        "normalized_SI": null,
+        "normalized_BL": "aqaba, jordan"
+      },
+      "container_count": {
+        "SI": null,
+        "BL": 2,
+        "normalized_SI": null,
+        "normalized_BL": 2
+      },
+      "gross_weight_kg": {
+        "SI": null,
+        "BL": 23794.0,
+        "normalized_SI": null,
+        "normalized_BL": 23794.0
+      }
+    },
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:24:17.877328+00:00",
+    "updated_at": "2026-09-20T14:24:17.877328+00:00",
+    "resolved_at": null
+  },
+  {
+    "review_id": "a41db8e8-fb4a-4155-95af-faf4c43eb68f",
+    "email_id": "email_343",
+    "review_status": "PENDING",
+    "initial_status": "NEEDS_REVIEW",
+    "review_reason": "missing_attachment",
+    "message": "Missing required document(s): SI, BL",
+    "original_extraction_payload": {
+      "email_id": "email_343",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "extraction_payload": {
+      "email_id": "email_343",
+      "SI": null,
+      "BL": null,
+      "escalation_reason": null,
+      "attachments_present": false
+    },
+    "side_by_side": {},
+    "initial_defect_fields": [],
+    "corrections": [],
+    "final_result": null,
+    "reviewer_note": null,
+    "created_at": "2026-09-20T14:24:19.637143+00:00",
+    "updated_at": "2026-09-20T14:24:19.637143+00:00",
+    "resolved_at": null
+  }
+]
