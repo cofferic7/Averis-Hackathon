@@ -81,7 +81,7 @@ export default function Navbar() {
 
         {/* Review Queue */}
         <Link
-          href="/reports"
+          href="/reviewqueue"
           className="group flex h-12 items-center gap-[13px] rounded-[10px] px-[13px] text-sm text-[#6B625B] transition-all duration-200 hover:translate-x-[2px] hover:bg-[#FFF5EF] hover:text-[#C2410C]"
         >
           <Icon type="queue" />

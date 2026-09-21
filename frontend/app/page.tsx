@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 
 type EmailType =
     | "CHECK_DOCUMENT"
@@ -688,25 +689,25 @@ export default function Dashboard({
                                     email.status ===
                                         "NEEDS_REVIEW" ? (
 
-                                        <button
-                                            onClick={openReviewQueue}
+                                        <Link
+                                            href="/reviewqueue"
                                             className="
-                                                px-4
-                                                py-2.5
                                                 bg-[#EA580C]
                                                 hover:bg-[#C2410C]
                                                 text-white
+                                                font-semibold
+                                                px-4
+                                                py-2.5
                                                 rounded-lg
                                                 text-sm
-                                                font-semibold
                                                 transition-all
                                                 duration-200
-                                                hover:shadow-md
                                                 hover:-translate-y-0.5
+                                                hover:shadow-md
                                             "
                                         >
-                                            Review →
-                                        </button>
+                                            Open Review Queue →
+                                        </Link>
 
                                     ) : (
 
