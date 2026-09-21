@@ -17,6 +17,36 @@ type ReviewCase = {
     raw: any;
 };
 
+type ResolvedRecord = {
+    emailId: string;
+    reviewId: string;
+    result: "APPROVED" | "CORRECTED" | "REJECTED";
+    date: string;
+    note: string;
+    acceptedDocument: "SI" | "BL";
+    originalSi: Record<string, any>;
+    originalBl: Record<string, any>;
+    finalSi: Record<string, any>;
+    finalBl: Record<string, any>;
+    changedFields: string[];
+};
+
+const REVIEW_STORAGE_KEY = "shipops_resolved_cases_v1";
+
+function loadResolvedCases(): ResolvedRecord[] {
+    try {
+        const saved = JSON.parse(localStorage.getItem(REVIEW_STORAGE_KEY) || "[]");
+        return Array.isArray(saved) ? saved : [];
+    } catch {
+        return [];
+    }
+}
+
+function storeResolvedCases(cases: ResolvedRecord[]): void {
+    localStorage.setItem(REVIEW_STORAGE_KEY, JSON.stringify(cases));
+    window.dispatchEvent(new Event("shipops-reviews-changed"));
+}
+
 
 function Icon({ name }: { name: "home" | "queue" | "check" | "search" | "bell" | "chevron" }) {
     const paths = {
@@ -57,9 +87,11 @@ function StatCard({ label, value, tone, symbol, detail }: {
 function CaseDetail({
     item,
     onBack,
+    onResolved,
 }: {
     item: ReviewCase;
     onBack: () => void;
+    onResolved: (record: ResolvedRecord) => void;
 }) {
     const isMismatch = item.status === "MISMATCH";
 
@@ -85,6 +117,7 @@ function CaseDetail({
     );
     const [notes, setNotes] = useState("");
     const [saved, setSaved] = useState(false);
+    const [saveError, setSaveError] = useState("");
 
     const fieldLabels: Record<string, string> = {
         shipper: "Shipper",
@@ -125,8 +158,8 @@ function CaseDetail({
 
 
     if (isMismatch) {
-        // Include every backend defect and any additional visible differences.
-        // The latter also covers older reports that recorded only the first defect.
+        // Compare the values shown in the documents so stale backend flags
+        // cannot mark identical values as different.
         const allFields = Object.keys(fieldLabels);
         const comparable = (field: string, value: any) => {
             if (value === null || value === undefined || String(value).trim() === "") return null;
@@ -137,17 +170,46 @@ function CaseDetail({
             }
             return text.replace(/\s+/g, " ").toLocaleLowerCase();
         };
-        const defectFields = Array.from(new Set<string>([
-            ...(Array.isArray(item.raw?.defect_fields) ? item.raw.defect_fields : []),
-            ...allFields.filter((field) => {
-                const siValue = comparable(field, si[field]);
-                const blValue = comparable(field, bl[field]);
-                return siValue !== null && blValue !== null && siValue !== blValue;
-            }),
-        ])).filter((field) => field in fieldLabels);
+        const defectFields = allFields.filter((field) => {
+            const siValue = comparable(field, si[field]);
+            const blValue = comparable(field, bl[field]);
+            return siValue !== null && blValue !== null && siValue !== blValue;
+        });
         const defectField = defectFields[0];
         const defectLabel =
             fieldLabels[defectField] || "Document mismatch";
+        const displaySi = choice === "BL"
+            ? { ...si, ...Object.fromEntries(defectFields.map((field) => [field, bl[field]])) }
+            : si;
+        const displayBl = choice === "SI"
+            ? { ...bl, ...Object.fromEntries(defectFields.map((field) => [field, si[field]])) }
+            : bl;
+
+        const resolveMismatch = () => {
+            if (!choice) return;
+            const originalSi = { ...si };
+            const originalBl = { ...bl };
+            const finalSi = { ...displaySi };
+            const finalBl = { ...displayBl };
+            const record: ResolvedRecord = {
+                emailId: item.emailId,
+                reviewId: `REV-${item.emailId}-${Date.now()}`,
+                result: defectFields.length ? "CORRECTED" : "APPROVED",
+                date: new Date().toISOString(),
+                note: notes,
+                acceptedDocument: choice,
+                originalSi,
+                originalBl,
+                finalSi,
+                finalBl,
+                changedFields: defectFields,
+            };
+            try {
+                onResolved(record);
+            } catch {
+                setSaveError("Could not save this review. Please try again.");
+            }
+        };
 
         return (
             <section className="detail-page">
@@ -196,44 +258,44 @@ function CaseDetail({
                         <dl>
                             {renderDocumentField(
                                 "Shipper",
-                                si.shipper,
-                                defectFields.includes("shipper")
+                                displaySi.shipper,
+                                !choice && defectFields.includes("shipper")
                             )}
 
                             {renderDocumentField(
                                 "Consignee",
-                                si.consignee,
-                                defectFields.includes("consignee")
+                                displaySi.consignee,
+                                !choice && defectFields.includes("consignee")
                             )}
 
                             {renderDocumentField(
                                 "Notify Party",
-                                si.notify_party,
-                                defectFields.includes("notify_party")
+                                displaySi.notify_party,
+                                !choice && defectFields.includes("notify_party")
                             )}
 
                             {renderDocumentField(
                                 "Port of loading",
-                                si.port_of_loading,
-                                defectFields.includes("port_of_loading")
+                                displaySi.port_of_loading,
+                                !choice && defectFields.includes("port_of_loading")
                             )}
 
                             {renderDocumentField(
                                 "Port of discharge",
-                                si.port_of_discharge,
-                                defectFields.includes("port_of_discharge")
+                                displaySi.port_of_discharge,
+                                !choice && defectFields.includes("port_of_discharge")
                             )}
 
                             {renderDocumentField(
                                 "Container count",
-                                si.container_count,
-                                defectFields.includes("container_count")
+                                displaySi.container_count,
+                                !choice && defectFields.includes("container_count")
                             )}
 
                             {renderDocumentField(
                                 "Gross weight (kg)",
-                                si.gross_weight_kg,
-                                defectFields.includes("gross_weight_kg")
+                                displaySi.gross_weight_kg,
+                                !choice && defectFields.includes("gross_weight_kg")
                             )}
                         </dl>
                     </article>
@@ -264,44 +326,44 @@ function CaseDetail({
                         <dl>
                             {renderDocumentField(
                                 "Shipper",
-                                bl.shipper,
-                                defectFields.includes("shipper")
+                                displayBl.shipper,
+                                !choice && defectFields.includes("shipper")
                             )}
 
                             {renderDocumentField(
                                 "Consignee",
-                                bl.consignee,
-                                defectFields.includes("consignee")
+                                displayBl.consignee,
+                                !choice && defectFields.includes("consignee")
                             )}
 
                             {renderDocumentField(
                                 "Notify Party",
-                                bl.notify_party,
-                                defectFields.includes("notify_party")
+                                displayBl.notify_party,
+                                !choice && defectFields.includes("notify_party")
                             )}
 
                             {renderDocumentField(
                                 "Port of loading",
-                                bl.port_of_loading,
-                                defectFields.includes("port_of_loading")
+                                displayBl.port_of_loading,
+                                !choice && defectFields.includes("port_of_loading")
                             )}
 
                             {renderDocumentField(
                                 "Port of discharge",
-                                bl.port_of_discharge,
-                                defectFields.includes("port_of_discharge")
+                                displayBl.port_of_discharge,
+                                !choice && defectFields.includes("port_of_discharge")
                             )}
 
                             {renderDocumentField(
                                 "Container count",
-                                bl.container_count,
-                                defectFields.includes("container_count")
+                                displayBl.container_count,
+                                !choice && defectFields.includes("container_count")
                             )}
 
                             {renderDocumentField(
                                 "Gross weight (kg)",
-                                bl.gross_weight_kg,
-                                defectFields.includes("gross_weight_kg")
+                                displayBl.gross_weight_kg,
+                                !choice && defectFields.includes("gross_weight_kg")
                             )}
                         </dl>
                     </article>
@@ -311,7 +373,7 @@ function CaseDetail({
                     <article className="info-card mismatch-details-card">
                         <h3>Mismatch details</h3>
                         <strong className="mismatch-summary">
-                            {defectFields.length ? `The documents disagree on ${defectFields.length} ${defectFields.length === 1 ? "field" : "fields"}.` : "Review the document differences."}
+                            {defectFields.length ? `The documents disagree on ${defectFields.length} ${defectFields.length === 1 ? "field" : "fields"}.` : "The report flagged a mismatch, but the displayed values match. Check the original documents before approving."}
                         </strong>
                         {defectFields.map((field) => (
                             <div className="mismatch-detail-row" key={field}>
@@ -357,6 +419,7 @@ function CaseDetail({
                             placeholder="Add an optional review note..."
                         />
 
+                        {saveError && <p role="alert">{saveError}</p>}
                         <div className="form-actions">
                             <button
                                 className="secondary"
@@ -368,9 +431,9 @@ function CaseDetail({
                             <button
                                 className="primary"
                                 disabled={!choice}
-                                onClick={() => setSaved(true)}
+                                onClick={resolveMismatch}
                             >
-                                {saved ? "Saved ✓" : "Resolve case"}
+                                Resolve case
                             </button>
                         </div>
                     </article>
@@ -668,13 +731,6 @@ function CaseDetail({
     );
 }
 
-const resolvedCases = [
-    { emailId: "email_004", reviewId: "REV-004", result: "APPROVED", date: "20 Sep 2026, 3:42 PM" },
-    { emailId: "email_011", reviewId: "REV-011", result: "CORRECTED", date: "20 Sep 2026, 2:18 PM" },
-    { emailId: "email_017", reviewId: "REV-017", result: "APPROVED", date: "19 Sep 2026, 5:05 PM" },
-    { emailId: "email_022", reviewId: "REV-022", result: "REJECTED", date: "19 Sep 2026, 11:30 AM" },
-];
-
 type EmailType = "CHECK_DOCUMENT" | "SPAM" | "NEW_SHIPPING_INSTRUCTION" | "INVOICE_QUESTION" | "OPERATIONAL_UPDATE";
 
 const classifiedEmails: Array<{ id: string; sender: string; subject: string; received: string; type: EmailType }> = [
@@ -734,37 +790,82 @@ function Dashboard({
     );
 }
 
-function ResolvedCases() {
+function ResolvedCases({ cases }: { cases: ResolvedRecord[] }) {
     const [search, setSearch] = useState("");
     const [resultFilter, setResultFilter] = useState("ALL");
-    const [viewing, setViewing] = useState<(typeof resolvedCases)[number] | null>(null);
-
-    const rows = resolvedCases.filter((item) => {
+    const [viewing, setViewing] = useState<ResolvedRecord | null>(null);
+    const rows = cases.filter((item) => {
         const term = search.trim().toLowerCase();
-        const matchesSearch = !term || item.emailId.toLowerCase().includes(term) || item.reviewId.toLowerCase().includes(term);
-        return matchesSearch && (resultFilter === "ALL" || item.result === resultFilter);
+        return (!term || item.emailId.toLowerCase().includes(term) || item.reviewId.toLowerCase().includes(term))
+            && (resultFilter === "ALL" || item.result === resultFilter);
     });
+    const formatRecordValue = (value: any) => value === null || value === undefined || value === "" ? "Missing" : String(value);
+    const exportReport = () => {
+        const blob = new Blob([JSON.stringify(cases, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = "resolved_cases.json";
+        anchor.click();
+        URL.revokeObjectURL(url);
+    };
 
     return (
         <section className="resolved-page">
-            <div className="resolved-heading"><div><span className="eyebrow">COMPLETED REVIEWS</span><h1>Resolved Cases</h1><p>View completed shipping document reviews and final decisions.</p></div><button className="export-button">⇩ Export report</button></div>
+            <div className="resolved-heading">
+                <div><span className="eyebrow">COMPLETED REVIEWS</span><h1>Resolved Cases</h1><p>View completed shipping document reviews and final decisions.</p></div>
+                <button className="export-button" onClick={exportReport} disabled={!cases.length}>⇩ Export report</button>
+            </div>
             <section className="resolved-stats">
-                <StatCard label="Total Resolved" value={24} tone="blue" symbol="▤" detail="All completed cases" />
-                <StatCard label="Approved" value={18} tone="green" symbol="✓" detail="No changes required" />
-                <StatCard label="Corrected & Approved" value={5} tone="amber" symbol="✎" detail="Updated after review" />
-                <StatCard label="Rejected" value={1} tone="red" symbol="×" detail="Documents invalid" />
+                <StatCard label="Total Resolved" value={cases.length} tone="blue" symbol="▤" detail="All completed cases" />
+                <StatCard label="Approved" value={cases.filter((item) => item.result === "APPROVED").length} tone="green" symbol="✓" detail="No changes required" />
+                <StatCard label="Corrected & Approved" value={cases.filter((item) => item.result === "CORRECTED").length} tone="amber" symbol="✎" detail="Updated after review" />
+                <StatCard label="Rejected" value={cases.filter((item) => item.result === "REJECTED").length} tone="red" symbol="×" detail="Documents invalid" />
             </section>
             <section className="queue-panel">
-                <div className="resolved-toolbar"><div><h2>Resolved Review Cases</h2><p>A history of completed decisions</p></div><label className="search-box"><Icon name="search" /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search email ID or review ID" /></label><select value={resultFilter} onChange={(e) => setResultFilter(e.target.value)}><option value="ALL">All results</option><option value="APPROVED">Approved</option><option value="CORRECTED">Corrected</option><option value="REJECTED">Rejected</option></select></div>
-                <div className="table-wrap"><table><thead><tr><th>Email ID</th><th>Review ID</th><th>Final result</th><th>Resolved date</th><th>Actions</th></tr></thead><tbody>{rows.map((item) => <tr key={item.reviewId}><td><strong>{item.emailId}</strong></td><td>{item.reviewId}</td><td><span className={`final-result ${item.result.toLowerCase()}`}>{item.result}</span></td><td>{item.date}</td><td><button className="view-button" onClick={() => setViewing(item)}>View Details</button></td></tr>)}</tbody></table>{!rows.length && <div className="empty"><strong>No resolved cases found</strong><p>Try another search or result filter.</p></div>}</div>
-                <footer className="panel-footer"><span>Showing {rows.length} of 24 resolved cases</span><div><button disabled>Previous</button><button className="current">1</button><button>2</button><button>3</button><button>Next</button></div></footer>
+                <div className="resolved-toolbar">
+                    <div><h2>Resolved Review Cases</h2><p>A history of completed decisions</p></div>
+                    <label className="search-box"><Icon name="search" /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search email ID or review ID" /></label>
+                    <select value={resultFilter} onChange={(e) => setResultFilter(e.target.value)}><option value="ALL">All results</option><option value="APPROVED">Approved</option><option value="CORRECTED">Corrected</option><option value="REJECTED">Rejected</option></select>
+                </div>
+                <div className="table-wrap"><table><thead><tr><th>Email ID</th><th>Review ID</th><th>Final result</th><th>Resolved date</th><th>Actions</th></tr></thead>
+                    <tbody>{rows.map((item) => <tr key={item.reviewId}><td><strong>{item.emailId}</strong></td><td>{item.reviewId}</td><td><span className={`final-result ${item.result.toLowerCase()}`}>{item.result}</span></td><td>{new Date(item.date).toLocaleString()}</td><td><button className="view-button" onClick={() => setViewing(item)}>View Details</button></td></tr>)}</tbody></table>
+                    {!rows.length && <div className="empty"><strong>No resolved cases found</strong><p>{cases.length ? "Try another search or result filter." : "Cases will appear here after you resolve them."}</p></div>}
+                </div>
+                <footer className="panel-footer"><span>Showing {rows.length} of {cases.length} resolved cases</span></footer>
             </section>
-            {viewing && <div className="modal-backdrop" onMouseDown={() => setViewing(null)}><section className="modal" onMouseDown={(e) => e.stopPropagation()}><button className="modal-close" onClick={() => setViewing(null)}>×</button><span className="eyebrow">RESOLVED REVIEW</span><h2>{viewing.reviewId}</h2><p>{viewing.emailId}</p><div className="resolved-detail"><span>Final result<strong className={`final-text ${viewing.result.toLowerCase()}`}>{viewing.result}</strong></span><span>Resolved date<strong>{viewing.date}</strong></span><span>Documents<strong>SI and BL reviewed</strong></span></div><div className="modal-actions"><button className="primary" onClick={() => setViewing(null)}>Close</button></div></section></div>}
+            {viewing && <div className="modal-backdrop" onMouseDown={() => setViewing(null)}>
+                <section className="modal" onMouseDown={(e) => e.stopPropagation()}>
+                    <button className="modal-close" onClick={() => setViewing(null)}>×</button>
+                    <span className="eyebrow">RESOLVED REVIEW</span><h2>{viewing.reviewId}</h2><p>{viewing.emailId}</p>
+                    <div className="resolved-detail">
+                        <span>Final result<strong className={`final-text ${viewing.result.toLowerCase()}`}>{viewing.result}</strong></span>
+                        <span>Resolved date<strong>{new Date(viewing.date).toLocaleString()}</strong></span>
+                        <span>Accepted document<strong>{viewing.acceptedDocument === "SI" ? "Shipping Instruction" : "Bill of Lading"}</strong></span>
+                        <span>Review note<strong>{viewing.note || "None"}</strong></span>
+                    </div>
+                    <h3>Fields reviewed</h3>
+                    {viewing.changedFields.length ? viewing.changedFields.map((field) => <div className="resolved-comparison" key={field}>
+                        <strong>{field.replace(/_/g, " ")}</strong>
+                        <p>Original SI: {formatRecordValue(viewing.originalSi[field])} · Original BL: {formatRecordValue(viewing.originalBl[field])}</p>
+                        <p>Final SI: {formatRecordValue(viewing.finalSi[field])} · Final BL: {formatRecordValue(viewing.finalBl[field])}</p>
+                    </div>) : <p>No differing values were visible in the documents.</p>}
+                    <div className="modal-actions"><button className="primary" onClick={() => setViewing(null)}>Close</button></div>
+                </section>
+            </div>}
         </section>
     );
 }
 
-export default function ReviewQueue() {
+export default function ReviewQueue({ initialPage = "queue" }: { initialPage?: "dashboard" | "queue" | "resolved" }) {
+    const [resolvedRecords, setResolvedRecords] = useState<ResolvedRecord[]>([]);
+    useEffect(() => { setResolvedRecords(loadResolvedCases()); }, []);
+    const saveResolution = (record: ResolvedRecord) => {
+        const next = [record, ...loadResolvedCases().filter((old) => old.emailId !== record.emailId)];
+        storeResolvedCases(next);
+        setResolvedRecords(next);
+        setSelectedCase(null);
+    };
     const searchParams = useSearchParams();
     const emailFromUrl = searchParams.get("email");
 
@@ -776,7 +877,7 @@ export default function ReviewQueue() {
         useState<ReviewCase | null>(null);
 
     const [currentPage, setCurrentPage] =
-        useState<"dashboard" | "queue" | "resolved">("queue");
+        useState<"dashboard" | "queue" | "resolved">(initialPage);
 
     const [data, setData] =
         useState<Record<string, any>>({});
@@ -797,9 +898,9 @@ export default function ReviewQueue() {
 
     const reviewCases = useMemo<ReviewCase[]>(() => {
         return Object.entries(data)
-            .filter(([, item]: [string, any]) =>
-                item.status === "MISMATCH" ||
-                item.status === "NEEDS_REVIEW"
+            .filter(([emailId, item]: [string, any]) =>
+                (item.status === "MISMATCH" || item.status === "NEEDS_REVIEW") &&
+                !resolvedRecords.some((record) => record.emailId === emailId)
             )
             .map(([emailId, item]: [string, any]) => {
                 let issue = "Requires review";
@@ -866,10 +967,12 @@ export default function ReviewQueue() {
                     raw: item,
                 };
             });
-    }, [data]);
-    
+    }, [data, resolvedRecords]);
+
     useEffect(() => {
-        if (!emailFromUrl || reviewCases.length === 0) return;
+        if (!emailFromUrl || reviewCases.length === 0) {
+            return;
+        }
 
         const matchingCase = reviewCases.find(
             (item) => item.emailId === emailFromUrl
@@ -907,7 +1010,7 @@ export default function ReviewQueue() {
                     if (matchingCase) {setSelectedCase(matchingCase);
                         setCurrentPage("queue");
         }
-    }}/> : currentPage === "resolved" ? <ResolvedCases /> : selectedCase ? <CaseDetail item={selectedCase} onBack={() => setSelectedCase(null)} /> : <section className="content">
+    }}/> : currentPage === "resolved" ? <ResolvedCases cases={resolvedRecords} /> : selectedCase ? <CaseDetail item={selectedCase} onBack={() => setSelectedCase(null)} onResolved={saveResolution} /> : <section className="content">
                     <div className="page-heading">
                         <div>
                             <span className="eyebrow">DOCUMENT VERIFICATION</span>
@@ -948,12 +1051,10 @@ export default function ReviewQueue() {
 
                         <StatCard
                             label="Resolved"
-                            value={Object.values(data).filter(
-                                (item: any) => item.status === "OK"
-                            ).length}
+                            value={resolvedRecords.length}
                             tone="green"
                             symbol="✓"
-                            detail="No issues detected"
+                            detail="Completed human reviews"
                         /></section>
 
                     <section className="queue-panel">
@@ -1938,7 +2039,7 @@ export default function ReviewQueue() {
             <style>{`.sidebar nav button{width:100%;height:48px;padding:0 13px;display:flex;align-items:center;gap:13px;border:0;border-radius:10px;color:#bcd0e8;background:transparent;font:inherit;font-size:14px;text-align:left;cursor:pointer;transition:.2s}.sidebar nav button:hover{background:rgba(255,255,255,.07);color:#fff;transform:translateX(2px)}.sidebar nav button.active{color:#fff;background:linear-gradient(90deg,#0964ce,#217ce0);box-shadow:0 9px 22px rgba(0,73,174,.35)}.sidebar nav button svg{width:19px;height:19px}.sidebar nav button b{margin-left:auto;min-width:23px;height:23px;padding:0 6px;display:grid;place-items:center;border-radius:999px;background:rgba(255,255,255,.18);font-size:11px}.resolved-page{padding:30px;max-width:1500px;margin:auto}.resolved-heading{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px}.resolved-heading h1{margin:5px 0 4px;font-size:31px}.resolved-heading p{margin:0;color:#687b99;font-size:14px}.export-button{height:39px;padding:0 15px;border:1px solid #cddaea;border-radius:9px;background:#fff;color:#24577f;font-weight:700;cursor:pointer}.resolved-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.resolved-toolbar{padding:20px;display:flex;align-items:center;gap:10px}.resolved-toolbar>div{margin-right:auto}.resolved-toolbar h2{margin:0;font-size:17px}.resolved-toolbar p{margin:4px 0 0;color:#8997aa;font-size:10px}.resolved-toolbar .search-box{width:320px}.resolved-toolbar select{height:40px;padding:0 32px 0 12px;border:1px solid #d7e1ed;border-radius:9px;background:#fff;color:#526781}.final-result{display:inline-block;padding:6px 11px;border-radius:999px;font-size:9px;font-weight:800}.final-result.approved{background:#d8f4e6;color:#08784f}.final-result.corrected{background:#fff0cd;color:#ad6700}.final-result.rejected{background:#ffe0e4;color:#d32039}.view-button{height:32px;padding:0 13px;border:1px solid #0871ea;border-radius:7px;background:#fff;color:#0869d8;font-size:10px;font-weight:800;cursor:pointer}.view-button:hover{background:#0871ea;color:#fff}.resolved-page .panel-footer button{width:auto;min-width:30px;padding:0 10px}.resolved-detail{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0}.resolved-detail span{padding:13px;border-radius:9px;background:#f4f8fd;color:#7889a0;font-size:10px}.resolved-detail strong{display:block;margin-top:5px;color:#203652;font-size:12px}.final-text.approved{color:#08784f}.final-text.corrected{color:#ad6700}.final-text.rejected{color:#d32039}@media(max-width:1050px){.resolved-stats{grid-template-columns:1fr 1fr}.sidebar nav button span,.sidebar nav button b{display:none}.sidebar nav button{justify-content:center}}@media(max-width:760px){.resolved-page{padding:20px 14px}.resolved-toolbar{flex-wrap:wrap}.resolved-toolbar>div{width:100%}.resolved-toolbar .search-box{width:100%}.resolved-stats{grid-template-columns:1fr 1fr}.resolved-heading p{font-size:12px}}@media(max-width:430px){.resolved-stats{grid-template-columns:1fr}.resolved-detail{grid-template-columns:1fr}}`}</style>
             <style>{`.dashboard-page{padding:30px;max-width:1500px;margin:auto}.dashboard-heading{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:21px}.dashboard-heading h1{margin:5px 0 4px;font-size:31px;letter-spacing:-.7px}.dashboard-heading p{margin:0;color:#687b99;font-size:14px}.category-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.category-title h2{margin:0;font-size:15px}.category-title button{padding:7px 11px;border:1px solid #d4dfeb;border-radius:8px;background:#fff;color:#5d718c;font-size:10px;font-weight:700;cursor:pointer}.category-title button.all-active{border-color:#1675df;background:#eaf3ff;color:#0864cf}.email-category-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:18px}.email-category-card{min-height:118px;padding:17px;display:flex;align-items:center;gap:12px;border:1px solid #dce5f1;border-radius:13px;background:#fff;color:#18304f;text-align:left;box-shadow:0 5px 18px rgba(29,63,105,.045);cursor:pointer;transition:.2s}.email-category-card:hover{transform:translateY(-3px);box-shadow:0 12px 25px rgba(29,63,105,.11)}.email-category-card.selected{border-color:#1977e2;box-shadow:0 0 0 3px rgba(25,119,226,.13),0 12px 25px rgba(29,63,105,.1)}.category-icon{width:44px;height:44px;display:grid;place-items:center;flex:none;border-radius:50%;font-size:19px;font-weight:800}.email-category-card>span:last-child{min-width:0}.email-category-card small,.email-category-card strong,.email-category-card em{display:block}.email-category-card small{min-height:27px;color:#627692;font-size:10px;line-height:1.25}.email-category-card strong{font-size:25px}.email-category-card em{margin-top:3px;color:#95a1b2;font-size:8px;font-style:normal}.email-category-card.purple .category-icon{background:#f0ddff;color:#a719d5}.email-category-card.purple strong{color:#a719d5}.email-category-card.red .category-icon{background:#ffe2e6;color:#d9233d}.email-category-card.red strong{color:#d9233d}.email-category-card.blue .category-icon{background:#dceeff;color:#0877ef}.email-category-card.blue strong{color:#0877ef}.email-category-card.green .category-icon{background:#daf5e8;color:#087853}.email-category-card.green strong{color:#087853}.email-category-card.yellow .category-icon{background:#fff0bd;color:#d28b00}.email-category-card.yellow strong{color:#d28b00}.email-table-heading{padding:18px 20px;display:flex;align-items:center;gap:12px}.email-table-heading>div{margin-right:auto}.email-table-heading h2{margin:0;font-size:17px}.email-table-heading p{margin:4px 0 0;color:#8695a9;font-size:10px}.email-table-heading .search-box{width:310px}.email-subject{font-weight:600}.email-type{display:inline-block;padding:6px 10px;border-radius:999px;font-size:8px;font-weight:800;white-space:nowrap}.email-type.check_document{background:#efddff;color:#9720bd}.email-type.spam{background:#ffe1e5;color:#d21e38}.email-type.new_shipping_instruction{background:#dceeff;color:#086cda}.email-type.invoice_question{background:#d9f4e6;color:#087550}.email-type.operational_update{background:#fff0c7;color:#a86a00}.view-button.neutral{border-color:#aab8c9;color:#526982}.view-button.neutral:hover{background:#526982;color:#fff}@media(max-width:1200px){.email-category-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:760px){.dashboard-page{padding:20px 14px}.email-category-grid{grid-template-columns:1fr 1fr}.email-table-heading{flex-wrap:wrap}.email-table-heading>div{width:100%}.email-table-heading .search-box{width:100%}.dashboard-heading p{font-size:12px}}@media(max-width:430px){.email-category-grid{grid-template-columns:1fr}}`}</style>
             <style>{`.email-category-grid{grid-template-columns:repeat(5,minmax(180px,1fr));gap:16px}.email-category-card{min-height:168px;padding:21px 18px;align-items:flex-start;border-radius:16px}.category-icon{width:56px;height:56px;border-radius:16px;font-size:23px}.category-content{display:flex;min-height:124px;flex:1;flex-direction:column}.email-category-card small{min-height:auto;margin-bottom:5px;color:#425a79;font-size:12px;font-weight:800;line-height:1.3}.email-category-card strong{font-size:32px;line-height:1.1}.email-category-card em{margin-top:7px;color:#74869d;font-size:9px;line-height:1.4}.email-category-card .category-content b{margin-top:auto;padding-top:8px;color:#536b88;font-size:9px}.email-category-card.selected .category-content b{color:#086bd9}.email-category-card.selected{transform:translateY(-3px)}@media(max-width:1300px){.email-category-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:850px){.email-category-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:500px){.email-category-grid{grid-template-columns:1fr}.email-category-card{min-height:145px}}`}</style>
-            <style>{`.mismatch-details-card{border-color:#ffc4cb;background:#fff5f6;color:#92253a}.mismatch-details-card h3{color:#92253a;font-size:19px}.mismatch-summary{display:block;margin-bottom:14px;font-size:16px}.mismatch-detail-row{padding:11px 0;border-top:1px solid #f5ccd3}.mismatch-detail-row h4{margin:0 0 7px;color:#92253a;font-size:16px}.mismatch-detail-row p{margin:5px 0;color:#7f4050;font-size:14px}.mismatch-detail-row p strong{color:#8f142f;font-size:15px}`}</style>
+            <style>{`.mismatch-details-card{border-color:#ffc4cb;background:#fff5f6;color:#92253a}.mismatch-details-card h3{color:#92253a;font-size:19px}.mismatch-summary{display:block;margin-bottom:14px;font-size:16px}.mismatch-detail-row{padding:11px 0;border-top:1px solid #f5ccd3}.mismatch-detail-row h4{margin:0 0 7px;color:#92253a;font-size:16px}.mismatch-detail-row p{margin:5px 0;color:#7f4050;font-size:14px}.mismatch-detail-row p strong{color:#8f142f;font-size:15px}.resolved-page .modal{max-height:85vh;overflow:auto}.resolved-comparison{border-top:1px solid #e4eaf2;padding:12px 0}.resolved-comparison p{margin:6px 0;color:#526781}`}</style>
         </div>
     );
 }
